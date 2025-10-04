@@ -19,10 +19,10 @@ export const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 animate-slide-in-top">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link to="/" className="text-2xl font-bold tracking-tight hover:opacity-80 transition-opacity">
-            <span className="text-foreground">
-              hideout<span className="text-primary">.</span>
+          {/* Logo with rounded container */}
+          <Link to="/" className="bg-card/50 backdrop-blur-sm rounded-2xl px-6 py-3 border border-border/50 hover:border-primary/30 transition-colors">
+            <span className="text-2xl font-bold text-foreground">
+              Hideout<span className="text-primary">.</span>
             </span>
           </Link>
 

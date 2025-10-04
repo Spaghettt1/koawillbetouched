@@ -10,8 +10,8 @@ const Index = () => {
       {/* Main Content */}
       <div className="min-h-screen flex items-center justify-center px-6">
         <main className="relative text-center space-y-12 animate-fade-in w-full max-w-3xl">
-          {/* Hideout Container with rounded background */}
-          <div className="relative bg-card/30 backdrop-blur-sm rounded-3xl p-12 border border-border/50">
+          {/* Big Hideout Text */}
+          <div className="relative">
             <h1 className="text-9xl md:text-[12rem] font-bold tracking-tight">
               <span className="text-foreground">Hideout</span>
               <span className="text-primary">.</span>
