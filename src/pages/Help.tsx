@@ -32,16 +32,20 @@ const Help = () => {
             <h3 className="font-semibold mb-2">Documentation</h3>
             <p className="text-sm text-muted-foreground">Browse our guides and tutorials</p>
           </Card>
-          <Card className="p-6 bg-card border-border hover:border-primary/20 transition-all cursor-pointer group">
-            <MessageCircle className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="font-semibold mb-2">Community</h3>
-            <p className="text-sm text-muted-foreground">Join our Discord community</p>
-          </Card>
-          <Card className="p-6 bg-card border-border hover:border-primary/20 transition-all cursor-pointer group">
-            <Mail className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition-transform" />
-            <h3 className="font-semibold mb-2">Contact Us</h3>
-            <p className="text-sm text-muted-foreground">Get in touch with support</p>
-          </Card>
+          <a href="https://discord.gg/HkbVraQH89" target="_blank" rel="noopener noreferrer">
+            <Card className="p-6 bg-card border-border hover:border-primary/20 transition-all cursor-pointer group">
+              <MessageCircle className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition-transform" />
+              <h3 className="font-semibold mb-2">Community</h3>
+              <p className="text-sm text-muted-foreground">Join our Discord community</p>
+            </Card>
+          </a>
+          <a href="mailto:hideout-network-buisness@hotmail.com">
+            <Card className="p-6 bg-card border-border hover:border-primary/20 transition-all cursor-pointer group">
+              <Mail className="w-8 h-8 text-primary mb-3 group-hover:scale-110 transition-transform" />
+              <h3 className="font-semibold mb-2">Contact Us</h3>
+              <p className="text-sm text-muted-foreground">Get in touch with support</p>
+            </Card>
+          </a>
         </div>
 
         {/* FAQ Section */}

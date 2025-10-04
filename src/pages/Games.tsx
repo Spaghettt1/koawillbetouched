@@ -15,7 +15,6 @@ import {
 import gamesData from "@/data/games.json";
 
 type Game = {
-  id: number;
   name: string;
   icon: string;
   popularity: string[];
@@ -195,7 +194,7 @@ const Games = () => {
           {filteredGames.map((game, index) => {
             return (
               <Card
-                key={game.id}
+                key={game.name}
                 onClick={() => handleGameClick(game.name)}
                 className="group p-6 bg-gradient-to-br from-card to-card/50 border-border hover:border-border/80 hover:scale-105 transition-all duration-300 cursor-pointer animate-fade-in"
                 style={{ animationDelay: `${index * 50}ms` }}

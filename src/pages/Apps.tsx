@@ -8,7 +8,6 @@ import * as LucideIcons from "lucide-react";
 import appsData from "@/data/apps.json";
 
 type App = {
-  id: number;
   name: string;
   icon: string;
   category: string;
@@ -56,7 +55,7 @@ const Apps = () => {
             const IconComponent = (LucideIcons as any)[app.icon] || LucideIcons.AppWindow;
             return (
               <Card
-                key={app.id}
+                key={app.name}
                 className="group p-6 bg-card border-border hover:border-primary/20 transition-all duration-300 cursor-pointer animate-fade-in"
                 style={{ animationDelay: `${index * 50}ms` }}
               >

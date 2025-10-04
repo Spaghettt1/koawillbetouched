@@ -1,6 +1,6 @@
 import { Navigation } from "@/components/Navigation";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, MessageCircle, Mail } from "lucide-react";
 
 const Index = () => {
   return (
@@ -29,6 +29,29 @@ const Index = () => {
               Search
             </button>
           </div>
+
+          {/* Footer */}
+          <footer className="mt-24 text-center space-y-4 text-sm text-muted-foreground">
+            <div className="flex justify-center gap-6">
+              <a 
+                href="https://discord.gg/HkbVraQH89" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 hover:text-primary transition-colors"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Discord Server
+              </a>
+              <a 
+                href="mailto:hideout-network-buisness@hotmail.com"
+                className="flex items-center gap-2 hover:text-primary transition-colors"
+              >
+                <Mail className="w-4 h-4" />
+                Support
+              </a>
+            </div>
+            <p>&copy; {new Date().getFullYear()} Hideout Network. All rights reserved.</p>
+          </footer>
         </main>
       </div>
     </div>
