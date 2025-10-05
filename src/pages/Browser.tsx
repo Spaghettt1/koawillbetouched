@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { ArrowLeft, ArrowRight, RotateCw, X, Plus, Home, Star, History, Download, Settings } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
@@ -17,6 +17,8 @@ interface Tab {
 
 const Browser = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const initialUrl = (location.state as { initialUrl?: string })?.initialUrl;
   const [tabs, setTabs] = useState<Tab[]>([
     { id: 1, title: "New Tab", url: "", history: [], historyIndex: -1 }
   ]);
@@ -51,6 +53,14 @@ const Browser = () => {
     localStorage.setItem('browser_history', JSON.stringify(browserHistory));
   }, [browserHistory]);
 
+  // Load initial URL from navigation state
+  useEffect(() => {
+    if (initialUrl && activeTab) {
+      setUrlInput(initialUrl);
+      loadUrl(initialUrl, activeTab.id);
+    }
+  }, []);
+
   const processUrl = (input: string): string => {
     if (!input) return "";
     
@@ -72,64 +82,56 @@ const Browser = () => {
 
     setLoading(true);
     setError(null);
-    try {
-      console.log('Loading URL:', url);
-      const { data, error } = await supabase.functions.invoke('web-proxy', {
-        body: { url }
-      });
-
-      console.log('Proxy response:', data);
-
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+    
+    // Update tab immediately to show we're loading
+    setTabs(prev => prev.map(tab => {
+      if (tab.id === tabId) {
+        const newHistory = tab.history.slice(0, tab.historyIndex + 1);
+        newHistory.push(url);
+        return {
+          ...tab,
+          url,
+          title: "Loading...",
+          history: newHistory,
+          historyIndex: newHistory.length - 1
+        };
       }
+      return tab;
+    }));
 
-      if (!data.success) {
-        throw new Error(data.error || 'Failed to load page');
-      }
+    // Add to browser history
+    setBrowserHistory(prev => [{
+      url,
+      title: new URL(url).hostname,
+      timestamp: Date.now()
+    }, ...prev.slice(0, 99)]);
 
-      // Update tab with new URL and history
-      setTabs(prev => prev.map(tab => {
-        if (tab.id === tabId) {
-          const newHistory = tab.history.slice(0, tab.historyIndex + 1);
-          newHistory.push(url);
-          return {
-            ...tab,
-            url,
-            title: new URL(url).hostname,
-            history: newHistory,
-            historyIndex: newHistory.length - 1
-          };
+    // Load directly in iframe without proxy - let the iframe handle it
+    if (iframeRef.current) {
+      iframeRef.current.src = url;
+      
+      // Update title when loaded
+      iframeRef.current.onload = () => {
+        try {
+          const title = iframeRef.current?.contentDocument?.title || new URL(url).hostname;
+          setTabs(prev => prev.map(tab => 
+            tab.id === tabId ? { ...tab, title } : tab
+          ));
+          setLoading(false);
+          setError(null);
+        } catch (e) {
+          // Cross-origin - can't access title
+          setTabs(prev => prev.map(tab => 
+            tab.id === tabId ? { ...tab, title: new URL(url).hostname } : tab
+          ));
+          setLoading(false);
         }
-        return tab;
-      }));
+      };
 
-      // Add to browser history
-      setBrowserHistory(prev => [{
-        url,
-        title: new URL(url).hostname,
-        timestamp: Date.now()
-      }, ...prev.slice(0, 99)]);
-
-      // Render content in iframe
-      if (iframeRef.current && data.html) {
-        const doc = iframeRef.current.contentDocument;
-        if (doc) {
-          doc.open();
-          doc.write(data.html);
-          doc.close();
-          console.log('Content loaded successfully');
-        }
-      }
-
-    } catch (error) {
-      console.error('Error loading page:', error);
-      const errorMsg = error instanceof Error ? error.message : "Unable to load this page. Some sites block browser embedding.";
-      setError(errorMsg);
-      toast.error(errorMsg);
-    } finally {
-      setLoading(false);
+      iframeRef.current.onerror = () => {
+        setError("Failed to load page");
+        setLoading(false);
+      };
     }
   };
 
@@ -380,8 +382,9 @@ const Browser = () => {
         {activeTab?.url ? (
           <iframe
             ref={iframeRef}
+            src={activeTab.url}
             className="w-full h-full border-0"
-            sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads"
+            sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads allow-top-navigation"
             title="Browser Content"
           />
         ) : (
