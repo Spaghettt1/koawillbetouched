@@ -43,8 +43,8 @@ const Privacy = () => {
                   <li>Data is stored securely using Supabase infrastructure</li>
                   <li>We cannot recover your password if you lose it</li>
                 </ul>
-                <p className="mt-3 text-yellow-500 font-medium">
-                  ⚠️ You are responsible for keeping your password safe. We cannot help you recover a lost password.
+                <p className="mt-3 text-yellow-500 font-medium flex items-center gap-1">
+                  <span>⚠</span> You are responsible for keeping your password safe. We cannot help you recover a lost password.
                 </p>
               </section>
 

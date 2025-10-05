@@ -116,8 +116,8 @@ const Account = () => {
                 <p className="text-xl font-mono text-foreground break-all">
                   {showPassword ? user.password : '••••••••••••••••'}
                 </p>
-                <p className="text-xs text-yellow-500 mt-2">
-                  ⚠️ Keep this safe! If you lose it, you cannot recover your account.
+                <p className="text-xs text-yellow-500 mt-2 flex items-center gap-1">
+                  <span>⚠</span> Keep this safe! If you lose it, you cannot recover your account.
                 </p>
               </div>
 

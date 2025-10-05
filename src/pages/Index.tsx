@@ -1,6 +1,7 @@
 import { Navigation } from "@/components/Navigation";
 import { Input } from "@/components/ui/input";
-import { Search, MessageCircle, Mail } from "lucide-react";
+import { Search, MessageCircle, Mail, FileText, Shield } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
@@ -32,7 +33,7 @@ const Index = () => {
 
           {/* Footer */}
           <footer className="mt-24 text-center space-y-4 text-sm text-muted-foreground">
-            <div className="flex justify-center gap-6">
+            <div className="flex justify-center gap-6 flex-wrap">
               <a 
                 href="https://discord.gg/HkbVraQH89" 
                 target="_blank" 
@@ -49,6 +50,20 @@ const Index = () => {
                 <Mail className="w-4 h-4" />
                 Support
               </a>
+              <Link 
+                to="/terms"
+                className="flex items-center gap-2 hover:text-primary transition-colors"
+              >
+                <FileText className="w-4 h-4" />
+                Terms of Service
+              </Link>
+              <Link 
+                to="/privacy"
+                className="flex items-center gap-2 hover:text-primary transition-colors"
+              >
+                <Shield className="w-4 h-4" />
+                Privacy Policy
+              </Link>
             </div>
             <p>&copy; {new Date().getFullYear()} Hideout Network. All rights reserved.</p>
           </footer>

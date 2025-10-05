@@ -25,8 +25,8 @@ const Terms = () => {
                   <li>All activities that occur under your account</li>
                   <li>Any loss of access to your account</li>
                 </ul>
-                <p className="mt-3 text-destructive font-medium">
-                  ⚠️ If you lose your password or account access, it is completely your fault and not ours. We cannot and will not recover lost accounts under any circumstances.
+                <p className="mt-3 text-destructive font-medium flex items-center gap-1">
+                  <span>⚠</span> If you lose your password or account access, it is completely your fault and not ours. We cannot and will not recover lost accounts under any circumstances.
                 </p>
               </section>
 

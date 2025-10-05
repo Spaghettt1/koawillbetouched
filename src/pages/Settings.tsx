@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Settings as SettingsIcon, Bell, Shield, Palette, Database } from "lucide-react";
+import { Settings as SettingsIcon, Bell, Palette, Database, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -37,7 +37,9 @@ const Settings = () => {
     // Load settings from localStorage
     const savedSettings = localStorage.getItem('hideout_settings');
     if (savedSettings) {
-      setSettings(JSON.parse(savedSettings));
+      const loadedSettings = JSON.parse(savedSettings);
+      setSettings(loadedSettings);
+      applySettings(loadedSettings);
     }
 
     // Check notification permission
@@ -49,8 +51,35 @@ const Settings = () => {
     }
   }, []);
 
+  const applySettings = (newSettings: SettingsData) => {
+    // Apply font size
+    const root = document.documentElement;
+    if (newSettings.fontSize === 'small') {
+      root.style.fontSize = '14px';
+    } else if (newSettings.fontSize === 'large') {
+      root.style.fontSize = '18px';
+    } else {
+      root.style.fontSize = '16px';
+    }
+
+    // Apply reduced motion
+    if (newSettings.reducedMotion) {
+      root.style.setProperty('--transition-smooth', 'none');
+    } else {
+      root.style.setProperty('--transition-smooth', 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)');
+    }
+
+    // Apply high contrast
+    if (newSettings.highContrast) {
+      root.classList.add('high-contrast');
+    } else {
+      root.classList.remove('high-contrast');
+    }
+  };
+
   const saveSettings = async (newSettings: SettingsData) => {
     setSettings(newSettings);
+    applySettings(newSettings);
     
     // Save to localStorage
     localStorage.setItem('hideout_settings', JSON.stringify(newSettings));
@@ -77,20 +106,29 @@ const Settings = () => {
     }
   };
 
-  const handleClearCache = () => {
-    if ('caches' in window) {
-      caches.keys().then(names => {
-        names.forEach(name => caches.delete(name));
-      });
-    }
-    toast.success("Cache cleared successfully!");
-  };
-
-  const handleManageCookies = () => {
+  const handleClearLocalStorage = () => {
     const storedUser = localStorage.getItem('hideout_user') || sessionStorage.getItem('hideout_user');
     
     localStorage.clear();
+    
+    if (storedUser) {
+      toast.info("Local storage cleared - you have been logged out");
+      window.location.href = '/';
+    } else {
+      toast.success("Local storage cleared successfully!");
+    }
+  };
+
+  const handleClearCookies = () => {
+    const storedUser = localStorage.getItem('hideout_user') || sessionStorage.getItem('hideout_user');
+    
+    // Clear session storage
     sessionStorage.clear();
+    
+    // Clear cookies (if any)
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
     
     if (storedUser) {
       toast.info("Cookies cleared - you have been logged out");
@@ -110,6 +148,15 @@ const Settings = () => {
     };
     saveSettings(defaultSettings);
     toast.success("Settings reset to defaults");
+  };
+
+  const handleClearCache = () => {
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => caches.delete(name));
+      });
+    }
+    toast.success("Cache cleared successfully!");
   };
 
   const handleSaveChanges = () => {
@@ -182,27 +229,43 @@ const Settings = () => {
             </div>
           </Card>
 
-          {/* Privacy Settings */}
+          {/* Data Settings */}
           <Card className="p-4 sm:p-6 bg-card border-border">
             <div className="flex items-center gap-3 mb-4">
-              <Shield className="w-5 h-5 text-primary" />
-              <h2 className="text-lg sm:text-xl font-semibold">Privacy & Security</h2>
+              <Database className="w-5 h-5 text-primary" />
+              <h2 className="text-lg sm:text-xl font-semibold">Data & Storage</h2>
             </div>
             <Separator className="mb-4" />
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Private Browsing</Label>
-                  <p className="text-sm text-muted-foreground">Don't save browsing history</p>
+                  <Label>Cache</Label>
+                  <p className="text-sm text-muted-foreground">Clear cached data</p>
                 </div>
-                <Switch disabled />
+                <Button variant="outline" size="sm" onClick={handleClearCache} className="gap-2">
+                  <Trash2 className="w-4 h-4" />
+                  Clear Cache
+                </Button>
               </div>
-              <div className="flex items-center justify-between opacity-50">
+              <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Block Trackers</Label>
-                  <p className="text-sm text-muted-foreground">Currently unavailable</p>
+                  <Label>Local Storage</Label>
+                  <p className="text-sm text-muted-foreground">This will log you out</p>
                 </div>
-                <Switch disabled />
+                <Button variant="outline" size="sm" onClick={handleClearLocalStorage} className="gap-2">
+                  <Trash2 className="w-4 h-4" />
+                  Clear Storage
+                </Button>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Cookies</Label>
+                  <p className="text-sm text-muted-foreground">This will log you out</p>
+                </div>
+                <Button variant="outline" size="sm" onClick={handleClearCookies} className="gap-2">
+                  <Trash2 className="w-4 h-4" />
+                  Clear Cookies
+                </Button>
               </div>
             </div>
           </Card>
@@ -236,31 +299,6 @@ const Settings = () => {
                 </div>
               </div>
             )}
-          </Card>
-
-          {/* Data Settings */}
-          <Card className="p-4 sm:p-6 bg-card border-border">
-            <div className="flex items-center gap-3 mb-4">
-              <Database className="w-5 h-5 text-primary" />
-              <h2 className="text-lg sm:text-xl font-semibold">Data & Storage</h2>
-            </div>
-            <Separator className="mb-4" />
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label>Cache</Label>
-                  <p className="text-sm text-muted-foreground">Clear cached data</p>
-                </div>
-                <Button variant="outline" size="sm" onClick={handleClearCache}>Clear Cache</Button>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label>Cookies & Storage</Label>
-                  <p className="text-sm text-muted-foreground">⚠️ This will log you out</p>
-                </div>
-                <Button variant="outline" size="sm" onClick={handleManageCookies}>Clear Data</Button>
-              </div>
-            </div>
           </Card>
 
           {/* Save Button */}
