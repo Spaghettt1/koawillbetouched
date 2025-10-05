@@ -20,6 +20,7 @@ const Privacy = () => {
                   <li>Password (encrypted and hashed for security)</li>
                   <li>Last activity timestamp (to enforce inactive account deletion)</li>
                   <li>Game favorites (optional, stored only if you use this feature)</li>
+                  <li>Browser data (tabs, bookmarks, history, settings - synced when logged in)</li>
                 </ul>
               </section>
 
@@ -75,6 +76,8 @@ const Privacy = () => {
                 <ul className="list-disc list-inside space-y-1 ml-4">
                   <li>Keep you logged in (if you choose "Remember me")</li>
                   <li>Store your session information locally on your device</li>
+                  <li>Save browser tabs, bookmarks, history, and settings locally</li>
+                  <li>Sync browser data to your account when logged in (encrypted and secure)</li>
                   <li>You can clear this data anytime by logging out or clearing your browser data</li>
                 </ul>
               </section>
@@ -106,6 +109,8 @@ const Privacy = () => {
                   <li>We are not responsible for third-party privacy practices</li>
                   <li>Review privacy policies of any third-party sites you visit</li>
                   <li>We do not control or endorse third-party content</li>
+                  <li>The Hideout Browser uses a proxy to access external websites - we do not log or monitor your browsing activity</li>
+                  <li>Browser history and bookmarks are stored locally and optionally synced to your account</li>
                 </ul>
               </section>
 

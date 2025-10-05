@@ -49,6 +49,8 @@ const Terms = () => {
                   <li>Not attempt to hack, exploit, or abuse the service</li>
                   <li>Not create multiple accounts to circumvent restrictions</li>
                   <li>Not use offensive or inappropriate usernames</li>
+                  <li>Use the Hideout Browser responsibly and in compliance with all applicable laws</li>
+                  <li>Not use the browser for illegal activities, harassment, or accessing prohibited content</li>
                 </ul>
               </section>
 
@@ -61,10 +63,12 @@ const Terms = () => {
                 <h2 className="text-2xl font-bold mb-3">6. Limitation of Liability</h2>
                 <p className="mb-2">Hideout Network and its operators:</p>
                 <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Are not liable for any data loss, including account deletion</li>
+                  <li>Are not liable for any data loss, including account deletion or browser data</li>
                   <li>Are not responsible for lost or forgotten passwords</li>
                   <li>Provide the service "as is" without warranties of any kind</li>
                   <li>Are not liable for any damages arising from use of the service</li>
+                  <li>Are not responsible for content accessed through the Hideout Browser</li>
+                  <li>Do not guarantee proxy functionality or access to any specific websites</li>
                 </ul>
               </section>
 

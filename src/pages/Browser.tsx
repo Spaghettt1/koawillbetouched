@@ -1,49 +1,131 @@
-import { useState, useRef, useEffect } from "react";
-import { ArrowLeft, ArrowRight, RotateCw, X, Plus, Home, Star, History, Settings } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { X } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { TabBar } from "@/components/browser/TabBar";
+import { NavigationBar } from "@/components/browser/NavigationBar";
+import { BrowserHelp } from "@/components/browser/BrowserHelp";
+import { BrowserSettings } from "@/components/browser/BrowserSettings";
+import { BrowserHistory } from "@/components/browser/BrowserHistory";
+import { supabase } from "@/integrations/supabase/client";
 
-// Ultraviolet proxy configuration
-declare global {
-  interface Window {
-    __uv$config: any;
-  }
-}
+// Browser configuration
 
 interface Tab {
   id: number;
   title: string;
   url: string;
+  proxiedUrl: string;
+  proxiedHtml?: string;
   history: string[];
   historyIndex: number;
+  pinned?: boolean;
 }
 
 const Browser = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const initialUrl = (location.state as { initialUrl?: string })?.initialUrl;
-  const [tabs, setTabs] = useState<Tab[]>([
-    { id: 1, title: "New Tab", url: "", history: [], historyIndex: -1 }
-  ]);
-  const [activeTabId, setActiveTabId] = useState(1);
+  
+  const [tabs, setTabs] = useState<Tab[]>(() => {
+    const saved = localStorage.getItem('hideout_browser_tabs');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed.length > 0 ? parsed : [{ id: 1, title: "New Tab", url: "", proxiedUrl: "", history: [], historyIndex: -1 }];
+      } catch {
+        return [{ id: 1, title: "New Tab", url: "", proxiedUrl: "", history: [], historyIndex: -1 }];
+      }
+    }
+    return [{ id: 1, title: "New Tab", url: "", proxiedUrl: "", history: [], historyIndex: -1 }];
+  });
+  
+  const [activeTabId, setActiveTabId] = useState(() => {
+    const saved = localStorage.getItem('hideout_browser_tabs');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed[0]?.id || 1;
+      } catch {
+        return 1;
+      }
+    }
+    return 1;
+  });
+  
   const [urlInput, setUrlInput] = useState("");
+  const [engine, setEngine] = useState<"google" | "duckduckgo" | "bing">(() => {
+    const saved = localStorage.getItem('hideout_browser_settings');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed.engine || "google";
+      } catch {
+        return "google";
+      }
+    }
+    return "google";
+  });
+  
   const [loading, setLoading] = useState(false);
   const [bookmarks, setBookmarks] = useState<string[]>(() => {
-    const saved = localStorage.getItem('browser_bookmarks');
+    const saved = localStorage.getItem('hideout_browser_bookmarks');
     return saved ? JSON.parse(saved) : [];
   });
   const [browserHistory, setBrowserHistory] = useState<{url: string, title: string, timestamp: number}[]>(() => {
-    const saved = localStorage.getItem('browser_history');
+    const saved = localStorage.getItem('hideout_browser_history');
     return saved ? JSON.parse(saved) : [];
   });
   const [error, setError] = useState<string | null>(null);
+  const [showMaxTabsDialog, setShowMaxTabsDialog] = useState(false);
+  const [zoom, setZoom] = useState(1);
+  const [closedTabs, setClosedTabs] = useState<Tab[]>([]);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const nextTabId = useRef(2);
+  const saveTimeoutRef = useRef<NodeJS.Timeout>();
 
   const activeTab = tabs.find(t => t.id === activeTabId);
+
+  // Sync browser data to Supabase if user is logged in
+  const syncToSupabase = useCallback(async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const browserData = {
+          tabs: JSON.stringify(tabs),
+          bookmarks: JSON.stringify(bookmarks),
+          history: JSON.stringify(browserHistory.slice(0, 500)),
+          settings: JSON.stringify({ engine }),
+          user_id: user.id,
+          updated_at: new Date().toISOString()
+        };
+        
+        // Store in a browser_data table (will need migration)
+        // For now, store in localStorage with prefix
+        localStorage.setItem(`hideout_browser_data_${user.id}`, JSON.stringify(browserData));
+      }
+    } catch (error) {
+      console.error('Error syncing to Supabase:', error);
+    }
+  }, [tabs, bookmarks, browserHistory, engine]);
+
+  // Debounced save to localStorage and Supabase
+  const saveToLocalStorage = useCallback(() => {
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+    saveTimeoutRef.current = setTimeout(async () => {
+      localStorage.setItem('hideout_browser_tabs', JSON.stringify(tabs));
+      localStorage.setItem('hideout_browser_bookmarks', JSON.stringify(bookmarks));
+      localStorage.setItem('hideout_browser_history', JSON.stringify(browserHistory.slice(0, 500)));
+      localStorage.setItem('hideout_browser_settings', JSON.stringify({ engine }));
+      
+      // Sync to Supabase
+      await syncToSupabase();
+    }, 1000);
+  }, [tabs, bookmarks, browserHistory, engine, syncToSupabase]);
 
   useEffect(() => {
     if (activeTab) {
@@ -52,29 +134,8 @@ const Browser = () => {
   }, [activeTabId, activeTab?.url]);
 
   useEffect(() => {
-    localStorage.setItem('browser_bookmarks', JSON.stringify(bookmarks));
-  }, [bookmarks]);
-
-  useEffect(() => {
-    localStorage.setItem('browser_history', JSON.stringify(browserHistory));
-  }, [browserHistory]);
-
-  // Register Ultraviolet service worker
-  useEffect(() => {
-    const registerSW = async () => {
-      if ('serviceWorker' in navigator) {
-        try {
-          const registration = await navigator.serviceWorker.register('/uv-sw.js', {
-            scope: '/uv/service/'
-          });
-          console.log('UV Service Worker registered:', registration);
-        } catch (error) {
-          console.error('UV Service Worker registration failed:', error);
-        }
-      }
-    };
-    registerSW();
-  }, []);
+    saveToLocalStorage();
+  }, [tabs, bookmarks, browserHistory, engine, saveToLocalStorage]);
 
   // Load initial URL from navigation state
   useEffect(() => {
@@ -87,9 +148,22 @@ const Browser = () => {
   const processUrl = (input: string): string => {
     if (!input) return "";
     
+    // Handle internal hideout:// pages
+    if (input.startsWith('hideout://')) {
+      return input;
+    }
+    
     // Check if it's a search query or URL
     if (!input.includes('.') || input.includes(' ')) {
-      return `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+      const q = encodeURIComponent(input);
+      switch (engine) {
+        case 'duckduckgo':
+          return `https://duckduckgo.com/?q=${q}`;
+        case 'bing':
+          return `https://www.bing.com/search?q=${q}`;
+        default:
+          return `https://www.google.com/search?q=${q}`;
+      }
     }
     
     // Add https if no protocol
@@ -100,28 +174,17 @@ const Browser = () => {
     return input;
   };
 
+  // Check if URL is an internal page
+  const isInternalPage = (url: string): boolean => {
+    return url.startsWith('hideout://');
+  };
+
   const loadUrl = async (url: string, tabId: number) => {
     if (!url) return;
 
-    setLoading(true);
-    setError(null);
-
-    try {
-      // Encode URL using Ultraviolet
-      const uvPrefix = '/uv/service/';
-      
-      // Simple XOR encoding for the URL (Ultraviolet's default)
-      const xorEncode = (str: string) => {
-        return encodeURIComponent(
-          str.split('').map((char, ind) => 
-            ind % 2 ? String.fromCharCode(char.charCodeAt(0) ^ 2) : char
-          ).join('')
-        );
-      };
-
-      const proxiedUrl = uvPrefix + xorEncode(url);
-      
-      // Update tab with new URL and history
+    // Handle internal hideout:// pages
+    if (isInternalPage(url)) {
+      const pageName = url.replace('hideout://', '');
       setTabs(prev => prev.map(tab => {
         if (tab.id === tabId) {
           const newHistory = tab.history.slice(0, tab.historyIndex + 1);
@@ -129,7 +192,41 @@ const Browser = () => {
           return {
             ...tab,
             url,
-            title: new URL(url).hostname,
+            proxiedUrl: url,
+            proxiedHtml: undefined,
+            title: `Hideout - ${pageName.charAt(0).toUpperCase() + pageName.slice(1)}`,
+            history: newHistory,
+            historyIndex: newHistory.length - 1
+          };
+        }
+        return tab;
+      }));
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Use edge function to proxy the site
+      const functionBase = 'https://ezxrjflznhydrmmblxni.functions.supabase.co/http-proxy';
+      const proxiedUrl = `${functionBase}?url=${encodeURIComponent(url)}`;
+
+      const hostname = new URL(url).hostname;
+
+      // Update tab with proxied URL
+      setTabs(prev => prev.map(tab => {
+        if (tab.id === tabId) {
+          const newHistory = tab.history.slice(0, tab.historyIndex + 1);
+          newHistory.push(url);
+          return {
+            ...tab,
+            url,
+            proxiedUrl,
+            proxiedHtml: undefined,
+            title: hostname,
             history: newHistory,
             historyIndex: newHistory.length - 1
           };
@@ -138,45 +235,17 @@ const Browser = () => {
       }));
 
       // Add to browser history (no duplicates)
-      const hostname = new URL(url).hostname;
       setBrowserHistory(prev => {
         const existing = prev.find(h => h.url === url);
         if (existing) return prev;
-        
-        return [{
-          url,
-          title: hostname,
-          timestamp: Date.now()
-        }, ...prev.slice(0, 99)];
+        return [{ url, title: hostname, timestamp: Date.now() }, ...prev.slice(0, 499)];
       });
 
-      // Load proxied URL in iframe
-      if (iframeRef.current) {
-        iframeRef.current.src = proxiedUrl;
-        
-        iframeRef.current.onload = () => {
-          try {
-            const title = iframeRef.current?.contentDocument?.title || hostname;
-            setTabs(prev => prev.map(tab => 
-              tab.id === tabId ? { ...tab, title } : tab
-            ));
-          } catch (e) {
-            setTabs(prev => prev.map(tab => 
-              tab.id === tabId ? { ...tab, title: hostname } : tab
-            ));
-          }
-          setLoading(false);
-          setError(null);
-        };
-
-        iframeRef.current.onerror = () => {
-          setError(`Unable to load ${hostname}`);
-          setLoading(false);
-        };
-      }
-    } catch (error) {
+      setLoading(false);
+      setError(null);
+    } catch (error: any) {
       console.error('Error loading URL:', error);
-      setError('Failed to load page');
+      setError(error.message || 'Failed to load page');
       setLoading(false);
     }
   };
@@ -220,18 +289,38 @@ const Browser = () => {
     }
   };
 
+  const handleStop = () => {
+    try {
+      iframeRef.current?.contentWindow?.stop();
+    } catch (e) {}
+    setLoading(false);
+    toast.success("Loading stopped");
+  };
+
   const handleHome = () => {
-    setUrlInput("");
-    setTabs(prev => prev.map(tab => 
-      tab.id === activeTabId ? { ...tab, url: "", title: "New Tab" } : tab
-    ));
+    const homePages = {
+      google: "https://google.com",
+      duckduckgo: "https://duckduckgo.com",
+      bing: "https://bing.com"
+    };
+    const homeUrl = homePages[engine];
+    setUrlInput(homeUrl);
+    if (activeTab) {
+      loadUrl(homeUrl, activeTab.id);
+    }
   };
 
   const addTab = () => {
+    if (tabs.length >= 10) {
+      setShowMaxTabsDialog(true);
+      return;
+    }
     const newTab: Tab = {
       id: nextTabId.current++,
       title: "New Tab",
       url: "",
+      proxiedUrl: "",
+      proxiedHtml: undefined,
       history: [],
       historyIndex: -1
     };
@@ -242,6 +331,11 @@ const Browser = () => {
   const closeTab = (tabId: number) => {
     if (tabs.length === 1) return;
     
+    const closedTab = tabs.find(t => t.id === tabId);
+    if (closedTab) {
+      setClosedTabs(prev => [closedTab, ...prev.slice(0, 9)]);
+    }
+    
     setTabs(prev => {
       const filtered = prev.filter(t => t.id !== tabId);
       if (activeTabId === tabId && filtered.length > 0) {
@@ -251,16 +345,57 @@ const Browser = () => {
     });
   };
 
+  const duplicateTab = (tabId: number) => {
+    const tab = tabs.find(t => t.id === tabId);
+    if (!tab || tabs.length >= 10) {
+      if (tabs.length >= 10) setShowMaxTabsDialog(true);
+      return;
+    }
+    const newTab: Tab = {
+      ...tab,
+      id: nextTabId.current++
+    };
+    setTabs(prev => [...prev, newTab]);
+    setActiveTabId(newTab.id);
+  };
+
+  const closeOtherTabs = (tabId: number) => {
+    setTabs(prev => prev.filter(t => t.id === tabId));
+    setActiveTabId(tabId);
+  };
+
+  const closeTabsToRight = (tabId: number) => {
+    const index = tabs.findIndex(t => t.id === tabId);
+    if (index === -1) return;
+    setTabs(prev => prev.slice(0, index + 1));
+  };
+
+  const togglePinTab = (tabId: number) => {
+    setTabs(prev => prev.map(tab =>
+      tab.id === tabId ? { ...tab, pinned: !tab.pinned } : tab
+    ));
+  };
+
+  const reopenClosedTab = () => {
+    if (closedTabs.length === 0) return;
+    const [tabToReopen, ...rest] = closedTabs;
+    setClosedTabs(rest);
+    const newTab = { ...tabToReopen, id: nextTabId.current++ };
+    setTabs(prev => [...prev, newTab]);
+    setActiveTabId(newTab.id);
+  };
+
   const toggleBookmark = () => {
     if (!activeTab?.url) return;
     
     setBookmarks(prev => {
-      if (prev.includes(activeTab.url)) {
+      const limited = prev.slice(0, 100);
+      if (limited.includes(activeTab.url)) {
         toast.success("Bookmark removed");
-        return prev.filter(b => b !== activeTab.url);
+        return limited.filter(b => b !== activeTab.url);
       } else {
         toast.success("Bookmark added");
-        return [...prev, activeTab.url];
+        return [...limited, activeTab.url];
       }
     });
   };
@@ -277,149 +412,176 @@ const Browser = () => {
     toast.success("Bookmarks cleared");
   };
 
+  const copyCurrentUrl = async () => {
+    if (activeTab?.url) {
+      await navigator.clipboard.writeText(activeTab.url);
+      toast.success("URL copied");
+    }
+  };
+
+  const handleClose = () => {
+    navigate('/');
+  };
+
+  const handleSelectUrl = (url: string) => {
+    setUrlInput(url);
+    if (activeTab) {
+      loadUrl(url, activeTab.id);
+    }
+  };
+
+  const handleSettingsClick = () => {
+    const url = "hideout://settings";
+    setUrlInput(url);
+    if (activeTab) {
+      loadUrl(url, activeTab.id);
+    }
+  };
+
+  const handleHelpClick = () => {
+    const url = "hideout://help";
+    setUrlInput(url);
+    if (activeTab) {
+      loadUrl(url, activeTab.id);
+    }
+  };
+
+  const handleHistoryClick = () => {
+    const url = "hideout://history";
+    setUrlInput(url);
+    if (activeTab) {
+      loadUrl(url, activeTab.id);
+    }
+  };
+
+  const handleZoomIn = () => {
+    setZoom(prev => Math.min(prev + 0.1, 2));
+  };
+
+  const handleZoomOut = () => {
+    setZoom(prev => Math.max(prev - 0.1, 0.5));
+  };
+
+
+  const closeAllTabs = () => {
+    setTabs([{ id: nextTabId.current++, title: "New Tab", url: "", proxiedUrl: "", history: [], historyIndex: -1 }]);
+    setActiveTabId(nextTabId.current - 1);
+    setShowMaxTabsDialog(false);
+    toast.success("All tabs closed");
+  };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey) {
+        if (e.key === 't') {
+          e.preventDefault();
+          addTab();
+        } else if (e.key === 'w') {
+          e.preventDefault();
+          if (activeTab) closeTab(activeTab.id);
+        } else if (e.key === 'r') {
+          e.preventDefault();
+          handleReload();
+        } else if (e.key === 'l') {
+          e.preventDefault();
+          const input = document.querySelector('input[type="text"]') as HTMLInputElement;
+          input?.focus();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          handleBack();
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          handleForward();
+        } else if (e.shiftKey && e.key === 'T') {
+          e.preventDefault();
+          reopenClosedTab();
+        } else if (e.key === 'Tab') {
+          e.preventDefault();
+          const currentIndex = tabs.findIndex(t => t.id === activeTabId);
+          if (e.shiftKey) {
+            const prevIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
+            setActiveTabId(tabs[prevIndex].id);
+          } else {
+            const nextIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0;
+            setActiveTabId(tabs[nextIndex].id);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeTab, tabs, activeTabId]);
+  
   return (
     <div className="h-screen flex flex-col bg-background">
-      {/* Tab Bar */}
-      <div className="flex items-center gap-1 bg-card border-b border-border px-2 py-1">
-        {tabs.map(tab => (
-          <div
-            key={tab.id}
-            className={`flex items-center gap-2 px-4 py-2 rounded-t-lg cursor-pointer min-w-[200px] max-w-[200px] group ${
-              activeTabId === tab.id ? 'bg-background' : 'bg-card hover:bg-muted'
-            }`}
-            onClick={() => setActiveTabId(tab.id)}
-          >
-            <span className="flex-1 truncate text-sm">{tab.title}</span>
-            {tabs.length > 1 && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-5 w-5 opacity-0 group-hover:opacity-100"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  closeTab(tab.id);
-                }}
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            )}
-          </div>
-        ))}
-        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={addTab}>
-          <Plus className="h-4 w-4" />
-        </Button>
-      </div>
-
-      {/* Navigation Bar */}
-      <div className="flex items-center gap-2 bg-card border-b border-border px-3 py-2">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleBack}
-          disabled={!activeTab || activeTab.historyIndex <= 0}
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleForward}
-          disabled={!activeTab || activeTab.historyIndex >= activeTab.history.length - 1}
-        >
-          <ArrowRight className="h-4 w-4" />
-        </Button>
-        <Button variant="ghost" size="icon" onClick={handleReload} disabled={loading}>
-          <RotateCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-        </Button>
-        <Button variant="ghost" size="icon" onClick={handleHome}>
-          <Home className="h-4 w-4" />
-        </Button>
-        
-        <form onSubmit={(e) => { e.preventDefault(); handleNavigate(); }} className="flex-1 flex items-center gap-2">
-          <Input
-            value={urlInput}
-            onChange={(e) => setUrlInput(e.target.value)}
-            placeholder="Search Google or type a URL"
-            className="flex-1"
+      <h1 className="sr-only">Web Proxy Browser</h1>
+      
+      {/* Tab bar with close button */}
+      <div className="flex items-center border-b bg-muted/30 px-2 py-1">
+        <div className="flex-1 min-w-0 overflow-x-auto scrollbar-hide">
+          <TabBar
+            tabs={tabs}
+            activeTabId={activeTabId}
+            onTabSelect={setActiveTabId}
+            onTabClose={closeTab}
+            onNewTab={addTab}
+            onDuplicateTab={duplicateTab}
+            onCloseOthers={closeOtherTabs}
+            onCloseToRight={closeTabsToRight}
+            onPinTab={togglePinTab}
           />
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={toggleBookmark}
-            disabled={!activeTab?.url}
-          >
-            <Star className={`h-4 w-4 ${isBookmarked ? 'fill-primary' : ''}`} />
-          </Button>
-        </form>
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <Settings className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-64">
-            <DropdownMenuItem disabled className="font-semibold">
-              Bookmarks
-            </DropdownMenuItem>
-            {bookmarks.length === 0 ? (
-              <DropdownMenuItem disabled className="text-muted-foreground">
-                No bookmarks yet
-              </DropdownMenuItem>
-            ) : (
-              bookmarks.slice(0, 5).map((bookmark, i) => (
-                <DropdownMenuItem 
-                  key={i}
-                  onClick={() => {
-                    setUrlInput(bookmark);
-                    activeTab && loadUrl(bookmark, activeTab.id);
-                  }}
-                >
-                  <Star className="h-3 w-3 mr-2 fill-primary" />
-                  {new URL(bookmark).hostname}
-                </DropdownMenuItem>
-              ))
-            )}
-            {bookmarks.length > 0 && (
-              <DropdownMenuItem onClick={clearBookmarks} className="text-destructive">
-                Clear all bookmarks
-              </DropdownMenuItem>
-            )}
-            
-            <DropdownMenuSeparator />
-            
-            <DropdownMenuItem disabled className="font-semibold">
-              <History className="h-3 w-3 mr-2" />
-              Recent History
-            </DropdownMenuItem>
-            {browserHistory.length === 0 ? (
-              <DropdownMenuItem disabled className="text-muted-foreground">
-                No history yet
-              </DropdownMenuItem>
-            ) : (
-              browserHistory.slice(0, 5).map((item, i) => (
-                <DropdownMenuItem 
-                  key={i}
-                  onClick={() => {
-                    setUrlInput(item.url);
-                    activeTab && loadUrl(item.url, activeTab.id);
-                  }}
-                >
-                  {item.title}
-                </DropdownMenuItem>
-              ))
-            )}
-            {browserHistory.length > 0 && (
-              <DropdownMenuItem onClick={clearHistory} className="text-destructive">
-                Clear history
-              </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleClose}
+          className="ml-2 h-8 w-8 flex-shrink-0 hover:bg-destructive/10 hover:text-destructive transition-colors"
+        >
+          <X className="h-4 w-4" />
+        </Button>
       </div>
+
+
+      <NavigationBar
+        urlInput={urlInput}
+        engine={engine}
+        loading={loading}
+        canGoBack={!!(activeTab && activeTab.historyIndex > 0)}
+        canGoForward={!!(activeTab && activeTab.historyIndex < activeTab.history.length - 1)}
+        isBookmarked={isBookmarked}
+        hasUrl={!!activeTab?.url}
+        bookmarks={bookmarks}
+        history={browserHistory}
+        onUrlChange={setUrlInput}
+        onEngineChange={setEngine}
+        onNavigate={handleNavigate}
+        onBack={handleBack}
+        onForward={handleForward}
+        onReload={handleReload}
+        onStop={handleStop}
+        onHome={handleHome}
+        onToggleBookmark={toggleBookmark}
+        onCopyUrl={copyCurrentUrl}
+        onOpenExternal={() => activeTab?.url && window.open(activeTab.url, '_blank')}
+        onClearBookmarks={clearBookmarks}
+        onClearHistory={clearHistory}
+        onSelectUrl={handleSelectUrl}
+        onSettingsClick={handleSettingsClick}
+        onHelpClick={handleHelpClick}
+        onZoomIn={handleZoomIn}
+        onZoomOut={handleZoomOut}
+        onHistoryClick={handleHistoryClick}
+      />
 
       {/* Content Area */}
-      <div className="flex-1 bg-background relative">
+      <div className="flex-1 bg-background relative overflow-hidden">
+        {loading && !isInternalPage(activeTab?.url || '') && (
+          <div className="absolute top-0 left-0 right-0 h-1 bg-primary/20 z-10">
+            <div className="h-full bg-primary animate-pulse" style={{ width: '70%' }} />
+          </div>
+        )}
         {error && (
           <div className="absolute top-0 left-0 right-0 bg-destructive/10 border-b border-destructive text-foreground p-4 z-10">
             <div className="flex items-center justify-center gap-2">
@@ -427,38 +589,63 @@ const Browser = () => {
               <p className="text-sm">
                 {error} 
                 <span className="ml-2 text-muted-foreground">
-                  Sites like Google, YouTube, and many others block iframe access for security.
+                  The site may be blocking proxy access or experiencing issues.
                 </span>
               </p>
-            </div>
-          </div>
-        )}
-        {activeTab?.url ? (
-          <iframe
-            ref={iframeRef}
-            src={activeTab.url}
-            className="w-full h-full border-0"
-            sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads allow-top-navigation"
-            title="Browser Content"
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center space-y-6 max-w-md">
-              <h2 className="text-3xl font-semibold">New Tab</h2>
-              <p className="text-muted-foreground">Search Google or enter a URL to browse the web</p>
-              
-              <Button 
-                onClick={() => navigate('/')}
-                variant="outline"
-                className="mt-4"
-              >
-                <Home className="h-4 w-4 mr-2" />
-                Back to Hideout
+              <Button variant="outline" size="sm" onClick={handleReload} className="ml-4">
+                Retry
               </Button>
             </div>
           </div>
         )}
+        {activeTab?.url ? (
+          isInternalPage(activeTab.url) ? (
+            <div className="w-full h-full overflow-y-auto">
+              {activeTab.url === 'hideout://help' && <BrowserHelp />}
+              {activeTab.url === 'hideout://settings' && <BrowserSettings />}
+              {activeTab.url === 'hideout://history' && (
+                <BrowserHistory 
+                  history={browserHistory}
+                  onSelectUrl={handleSelectUrl}
+                  onClearHistory={clearHistory}
+                />
+              )}
+            </div>
+          ) : (
+            <iframe
+              ref={iframeRef}
+              src={activeTab.proxiedUrl || 'about:blank'}
+              className="w-full h-full border-0 transition-transform duration-200"
+              style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
+              sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads allow-top-navigation allow-modals"
+              referrerPolicy="no-referrer"
+              title="Browser Content"
+            />
+          )
+        ) : (
+          <div className="flex items-center justify-center h-full animate-fade-in">
+            <div className="text-center space-y-6 max-w-md">
+              <h2 className="text-3xl font-semibold">New Tab</h2>
+              <p className="text-muted-foreground">Search {engine.charAt(0).toUpperCase() + engine.slice(1)} or enter a URL to browse the web</p>
+            </div>
+          </div>
+        )}
       </div>
+
+      <AlertDialog open={showMaxTabsDialog} onOpenChange={setShowMaxTabsDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Maximum Tabs Reached</AlertDialogTitle>
+            <AlertDialogDescription>
+              You've reached the maximum of 10 tabs. Close some tabs to save data and improve performance, or continue browsing with your current tabs.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Continue</AlertDialogCancel>
+            <AlertDialogAction onClick={closeAllTabs}>Close All Tabs</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

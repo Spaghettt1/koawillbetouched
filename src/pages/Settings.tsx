@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -18,6 +19,8 @@ type SettingsData = {
 };
 
 const Settings = () => {
+  const location = useLocation();
+  const fromBrowser = (location.state as { fromBrowser?: boolean })?.fromBrowser;
   const [user, setUser] = useState<any>(null);
   const [settings, setSettings] = useState<SettingsData>({
     reducedMotion: false,
@@ -168,6 +171,13 @@ const Settings = () => {
       <Navigation />
 
       <main className="pt-24 px-4 sm:px-6 pb-12 max-w-4xl mx-auto">
+        {fromBrowser && (
+          <div className="mb-8 p-8 bg-card border border-border rounded-lg text-center animate-fade-in">
+            <h2 className="text-2xl font-bold mb-2">🚧 Under Construction</h2>
+            <p className="text-muted-foreground">Browser-specific settings are coming soon!</p>
+          </div>
+        )}
+        
         {/* Header */}
         <div className="space-y-6 mb-12 animate-fade-in">
           <div className="flex items-center gap-3">
