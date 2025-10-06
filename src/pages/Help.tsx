@@ -126,30 +126,21 @@ const Help = () => {
 
         {/* Browser Help Card */}
         <Card className="p-8 bg-card border-border">
-          <h2 className="text-2xl font-bold mb-4">Browser Help</h2>
-          <div className="space-y-4 text-sm">
-            <div>
-              <h3 className="font-semibold mb-2">Internal Pages</h3>
-              <p className="text-muted-foreground">You can access special browser pages using hideout:// URLs:</p>
-              <ul className="list-disc list-inside text-muted-foreground ml-4 mt-2">
-                <li>hideout://help - Browser help and documentation</li>
-                <li>hideout://settings - Browser settings</li>
-                <li>hideout://history - View your browsing history</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Tab Management</h3>
-              <p className="text-muted-foreground">
-                Right-click on any tab for more options like duplicate, pin, or close other tabs. You can have up to 5 tabs open at once.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Bookmarks & History</h3>
-              <p className="text-muted-foreground">
-                Click the star icon to bookmark pages, and use the history menu to revisit sites. Your data is saved locally and synced to your account if you're logged in.
-              </p>
-            </div>
+          <div className="flex items-center gap-3 mb-4">
+            <BookOpen className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl font-bold">Browser</h2>
           </div>
+          <p className="text-muted-foreground mb-4">
+            For detailed browser documentation and help, visit:
+          </p>
+          
+          <a 
+            href="/browser?url=hideout://help"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            <Globe className="w-5 h-5" />
+            <span className="font-semibold">hideout://help</span>
+          </a>
         </Card>
       </main>
     </div>

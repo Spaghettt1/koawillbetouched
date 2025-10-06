@@ -60,8 +60,8 @@ export const TabBar = ({
                 <div
                   className={`flex items-center gap-2 px-3 py-2 rounded-t-lg cursor-pointer group transition-all duration-200 animate-scale-in ${
                     activeTabId === tab.id 
-                      ? 'bg-background shadow-sm border-b-2 border-primary' 
-                      : 'bg-card hover:bg-muted'
+                      ? 'bg-muted/50' 
+                      : 'bg-card hover:bg-muted/30'
                   } ${tab.pinned ? 'min-w-[60px] max-w-[60px]' : ''}`}
                   style={{ 
                     minWidth: tab.pinned ? '60px' : getTabWidth(), 

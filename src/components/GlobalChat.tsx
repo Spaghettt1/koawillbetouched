@@ -46,25 +46,31 @@ export const GlobalChat = () => {
   };
 
   const fetchMessages = async () => {
-    const { data, error } = await supabase
-      .from('global_chat')
-      .select(`
-        id,
-        user_id,
-        message,
-        created_at,
-        users!global_chat_user_id_fkey (username)
-      `)
-      .order('created_at', { ascending: false })
-      .limit(100);
+    try {
+      const { data, error } = await (supabase as any)
+        .from('global_chat')
+        .select(`
+          id,
+          user_id,
+          message,
+          created_at,
+          users!global_chat_user_id_fkey (username)
+        `)
+        .order('created_at', { ascending: false })
+        .limit(100);
 
-    if (!error && data) {
-      const formattedData = data.map(msg => ({
-        ...msg,
-        profiles: { username: (msg as any).users?.username || 'Unknown' }
-      }));
-      setMessages(formattedData.reverse() as any);
-      scrollToBottom();
+      if (!error && data) {
+        const formattedData = data.map((msg: any) => ({
+          ...msg,
+          profiles: { username: msg.users?.username || 'Unknown' }
+        }));
+        setMessages(formattedData.reverse());
+        scrollToBottom();
+      } else if (error) {
+        console.error('Fetch messages error:', error);
+      }
+    } catch (err) {
+      console.error('Fetch messages error:', err);
     }
   };
 
@@ -79,28 +85,32 @@ export const GlobalChat = () => {
           table: 'global_chat'
         },
         async (payload) => {
-          const { data: userProfile } = await supabase
-            .from('users')
-            .select('username')
-            .eq('id', payload.new.user_id)
-            .single();
+          try {
+            const { data: userProfile } = await (supabase as any)
+              .from('users')
+              .select('username')
+              .eq('id', payload.new.user_id)
+              .maybeSingle();
 
-          const newMsg: ChatMessage = {
-            ...payload.new,
-            profiles: userProfile || { username: 'Unknown' }
-          } as ChatMessage;
+            const newMsg: ChatMessage = {
+              ...payload.new,
+              profiles: userProfile || { username: 'Unknown' }
+            } as ChatMessage;
 
-          setMessages(prev => {
-            const updated = [...prev, newMsg];
-            if (updated.length > 100) {
-              // Delete the oldest message from DB
-              const oldest = updated[0];
-              supabase.from('global_chat').delete().eq('id', oldest.id);
-              return updated.slice(1);
-            }
-            return updated;
-          });
-          scrollToBottom();
+            setMessages(prev => {
+              const updated = [...prev, newMsg];
+              if (updated.length > 100) {
+                // Delete the oldest message from DB
+                const oldest = updated[0];
+                (supabase as any).from('global_chat').delete().eq('id', oldest.id);
+                return updated.slice(1);
+              }
+              return updated;
+            });
+            scrollToBottom();
+          } catch (err) {
+            console.error('Subscribe error:', err);
+          }
         }
       )
       .subscribe();
@@ -126,7 +136,7 @@ export const GlobalChat = () => {
     }
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('global_chat')
         .insert([{
           user_id: user.id,
@@ -135,7 +145,7 @@ export const GlobalChat = () => {
 
       if (error) {
         console.error('Chat error:', error);
-        toast.error("Failed to send message: " + error.message);
+        toast.error("Failed to send message");
       } else {
         setNewMessage("");
       }

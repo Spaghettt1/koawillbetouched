@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Navigation } from "@/components/Navigation";
 import { Input } from "@/components/ui/input";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, Heart } from "lucide-react";
 import { GlobalChat } from "@/components/GlobalChat";
+import { supabase } from "@/integrations/supabase/client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,17 +27,87 @@ const Apps = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const loadFavorites = async () => {
+      const storedUser = localStorage.getItem('hideout_user') || sessionStorage.getItem('hideout_user');
+      if (!storedUser) {
+        setFavorites([]);
+        return;
+      }
+
+      try {
+        const user = JSON.parse(storedUser);
+        const { data } = await (supabase as any)
+          .from('favorites')
+          .select('game_name')
+          .eq('user_id', user.id);
+
+        if (data) {
+          setFavorites(data.map((f: any) => f.game_name));
+        }
+      } catch (error) {
+        setFavorites([]);
+      }
+    };
+
+    loadFavorites();
+  }, []);
+
+  const handleFavorite = async (appName: string) => {
+    const isFav = favorites.includes(appName);
+    let newFavorites: string[];
+
+    if (isFav) {
+      newFavorites = favorites.filter(f => f !== appName);
+    } else {
+      newFavorites = [...favorites, appName];
+    }
+
+    setFavorites(newFavorites);
+    localStorage.setItem('hideout_app_favorites', JSON.stringify(newFavorites));
+
+    const storedUser = localStorage.getItem('hideout_user') || sessionStorage.getItem('hideout_user');
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+
+        if (isFav) {
+          await (supabase as any)
+            .from('favorites')
+            .delete()
+            .eq('user_id', user.id)
+            .eq('game_name', appName);
+        } else {
+          await (supabase as any)
+            .from('favorites')
+            .insert([{ user_id: user.id, game_name: appName }]);
+        }
+      } catch (error) {
+        console.error('Error syncing favorites to database:', error);
+      }
+    }
+  };
+
   const filteredApps = apps
     .filter((app) => {
       const matchesSearch = app.name.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = categoryFilter === "all" || app.category === categoryFilter;
       return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      const aIsFavorite = favorites.includes(a.name);
+      const bIsFavorite = favorites.includes(b.name);
+      
+      if (aIsFavorite && !bIsFavorite) return -1;
+      if (!aIsFavorite && bIsFavorite) return 1;
+      return 0;
     });
 
   const allCategories = Array.from(new Set(apps.map(app => app.category)));
@@ -107,37 +178,62 @@ const Apps = () => {
 
         {/* Apps Grid - Poki style */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-          {filteredApps.map((app, index) => (
-            <a
-              key={app.name}
-              href={app.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative bg-card rounded-lg overflow-hidden border border-border hover:border-primary/50 hover:scale-105 transition-all duration-200 cursor-pointer animate-fade-in"
-              style={{ animationDelay: `${index * 20}ms` }}
-            >
-              <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-muted/50 to-muted">
-                <img 
-                  src={app.icon} 
-                  alt={app.name} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200" 
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
+          {filteredApps.map((app, index) => {
+            const isFav = favorites.includes(app.name);
+            
+            return (
+              <div
+                key={app.name}
+                className="group relative bg-card rounded-lg overflow-hidden border border-border hover:border-primary/50 hover:scale-105 transition-all duration-200 cursor-pointer animate-fade-in"
+                style={{ animationDelay: `${index * 20}ms` }}
+              >
+                <a
+                  href={app.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-muted/50 to-muted">
+                    <img 
+                      src={app.icon} 
+                      alt={app.name} 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200" 
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </a>
+                
+                {/* Heart Icon */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleFavorite(app.name);
                   }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-red-500/90 hover:scale-110 z-10"
+                >
+                  <Heart className={`w-4 h-4 transition-all ${isFav ? 'fill-red-500 text-red-500' : 'text-white'}`} />
+                </button>
+                
+                <a
+                  href={app.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-2"
+                >
+                  <h3 className="text-sm font-semibold truncate group-hover:text-primary transition-colors">
+                    {app.name}
+                  </h3>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {app.category}
+                  </p>
+                </a>
               </div>
-              <div className="p-2">
-                <h3 className="text-sm font-semibold truncate group-hover:text-primary transition-colors">
-                  {app.name}
-                </h3>
-                <p className="text-xs text-muted-foreground truncate">
-                  {app.category}
-                </p>
-              </div>
-            </a>
-          ))}
+            );
+          })}
         </div>
 
         {/* No results */}

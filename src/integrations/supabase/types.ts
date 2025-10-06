@@ -90,19 +90,19 @@ export type Database = {
       favorites: {
         Row: {
           created_at: string
-          game_id: string
+          game_name: string
           id: string
           user_id: string
         }
         Insert: {
           created_at?: string
-          game_id: string
+          game_name: string
           id?: string
           user_id: string
         }
         Update: {
           created_at?: string
-          game_id?: string
+          game_name?: string
           id?: string
           user_id?: string
         }
@@ -178,7 +178,7 @@ export type Database = {
             foreignKeyName: "global_chat_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "profiles"
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]

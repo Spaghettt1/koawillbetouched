@@ -231,11 +231,6 @@ const Games = () => {
         console.error('Error syncing favorites to database:', error);
       }
     }
-
-    toast({
-      title: isFav ? "Removed from Favorites" : "Added to Favorites",
-      description: `${targetGame} has been ${isFav ? 'removed from' : 'added to'} your favorites`,
-    });
   };
 
   // If a game is selected, show the game player
@@ -275,13 +270,13 @@ const Games = () => {
               </Button>
               <Button
                 onClick={() => handleFavorite()}
-                className={`gap-2 transition-all duration-300 ${
+                className={`gap-2 transition-colors ${
                   isFavorited 
-                    ? 'bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-500/50 scale-105' 
-                    : 'bg-red-500/80 hover:bg-red-600 text-white hover:shadow-lg hover:shadow-red-500/30 hover:scale-105'
+                    ? 'bg-red-600 hover:bg-red-700 text-white' 
+                    : 'bg-red-500/80 hover:bg-red-600 text-white'
                 }`}
               >
-                <Heart className={`w-4 h-4 transition-all duration-300 ${isFavorited ? 'fill-current animate-pulse' : ''}`} />
+                <Heart className={`w-4 h-4 ${isFavorited ? 'fill-current' : ''}`} />
                 {isFavorited ? 'Favorited' : 'Favorite'}
               </Button>
             </div>
