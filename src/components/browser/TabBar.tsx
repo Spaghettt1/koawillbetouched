@@ -52,7 +52,7 @@ export const TabBar = ({
 
   return (
     <TooltipProvider>
-      <div className="flex items-center gap-1 justify-between">
+      <div className="flex items-center gap-1">
         <div className="flex items-center gap-1 min-w-0">
           {tabs.map((tab, index) => (
             <ContextMenu key={tab.id}>
@@ -109,25 +109,25 @@ export const TabBar = ({
               </ContextMenuItem>
             </ContextMenuContent>
           </ContextMenu>
-        ))}
-        </div>
+          ))}
         
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="h-8 w-8 flex-shrink-0 hover-scale" 
-              onClick={onNewTab}
-              disabled={!canAddTab}
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            {canAddTab ? `New Tab (Alt+T)` : `Max ${maxTabs} tabs reached`}
-          </TooltipContent>
-        </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 flex-shrink-0 hover-scale ml-1" 
+                onClick={onNewTab}
+                disabled={!canAddTab}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {canAddTab ? `New Tab (Alt+T)` : `Max ${maxTabs} tabs reached`}
+            </TooltipContent>
+          </Tooltip>
+        </div>
       </div>
     </TooltipProvider>
   );
