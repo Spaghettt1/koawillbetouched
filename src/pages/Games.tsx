@@ -106,25 +106,30 @@ const Games = () => {
 
   useEffect(() => {
     const loadFavorites = async () => {
+      // Always load local favorites first
+      const localFavs: string[] = JSON.parse(localStorage.getItem('hideout_game_favorites') || '[]');
+      let merged = [...localFavs];
+
       const storedUser = localStorage.getItem('hideout_user') || sessionStorage.getItem('hideout_user');
-      if (!storedUser) {
-        setFavorites([]);
-        return;
-      }
+      if (storedUser) {
+        try {
+          const user = JSON.parse(storedUser);
+          const { data } = await (supabase as any)
+            .from('favorites')
+            .select('game_name')
+            .eq('user_id', user.id);
 
-      try {
-        const user = JSON.parse(storedUser);
-        const { data } = await (supabase as any)
-          .from('favorites')
-          .select('game_name')
-          .eq('user_id', user.id);
-
-        if (data) {
-          setFavorites(data.map((f: any) => f.game_name));
+          if (data) {
+            const dbFavs = data.map((f: any) => f.game_name as string);
+            merged = Array.from(new Set([...localFavs, ...dbFavs]));
+          }
+        } catch (error) {
+          // ignore DB errors, keep local
         }
-      } catch (error) {
-        setFavorites([]);
       }
+
+      setFavorites(merged);
+      localStorage.setItem('hideout_game_favorites', JSON.stringify(merged));
     };
 
     loadFavorites();
@@ -134,9 +139,11 @@ const Games = () => {
     const checkFavorite = async () => {
       if (!currentGame) return;
 
+      const localFavs: string[] = JSON.parse(localStorage.getItem('hideout_game_favorites') || '[]');
+
       const storedUser = localStorage.getItem('hideout_user') || sessionStorage.getItem('hideout_user');
       if (!storedUser) {
-        setIsFavorited(false);
+        setIsFavorited(localFavs.includes(currentGame.name));
         return;
       }
 
@@ -149,9 +156,9 @@ const Games = () => {
           .eq('game_name', currentGame.name)
           .maybeSingle();
 
-        setIsFavorited(!!data);
+        setIsFavorited(localFavs.includes(currentGame.name) || !!data);
       } catch (error) {
-        setIsFavorited(false);
+        setIsFavorited(localFavs.includes(currentGame.name));
       }
     };
 
@@ -192,6 +199,30 @@ const Games = () => {
 
   const allCategories = Array.from(new Set(games.flatMap(game => game.categories)));
 
+  // Sync favorites across pages/components and tabs
+  useEffect(() => {
+    const onFavUpdated = (e: any) => {
+      const favs: string[] = e.detail?.favorites || [];
+      setFavorites(favs);
+      if (currentGame) setIsFavorited(favs.includes(currentGame.name));
+    };
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'hideout_game_favorites') {
+        try {
+          const favs = JSON.parse(e.newValue || '[]');
+          setFavorites(favs);
+          if (currentGame) setIsFavorited(favs.includes(currentGame.name));
+        } catch {}
+      }
+    };
+    window.addEventListener('hideout:favorites-updated', onFavUpdated as any);
+    window.addEventListener('storage', onStorage);
+    return () => {
+      window.removeEventListener('hideout:favorites-updated', onFavUpdated as any);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, [currentGame?.name]);
+
   const handleFavorite = async (gameName?: string) => {
     const targetGame = gameName || currentGame?.name;
     if (!targetGame) return;
@@ -207,7 +238,8 @@ const Games = () => {
 
     // Always update localStorage
     setFavorites(newFavorites);
-    localStorage.setItem('hideout_favorites', JSON.stringify(newFavorites));
+    localStorage.setItem('hideout_game_favorites', JSON.stringify(newFavorites));
+    window.dispatchEvent(new CustomEvent('hideout:favorites-updated', { detail: { favorites: newFavorites } }));
     if (currentGame?.name === targetGame) setIsFavorited(!isFav);
 
     // If user is logged in, also update database

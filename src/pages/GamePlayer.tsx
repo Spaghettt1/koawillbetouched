@@ -54,6 +54,26 @@ const GamePlayer = () => {
     setIsFavorite(localFavorites.includes(gameName));
   };
 
+  // Sync favorites across app via custom event + storage
+  useEffect(() => {
+    const updateFromLocal = () => {
+      if (game) {
+        const favs = JSON.parse(localStorage.getItem('hideout_game_favorites') || '[]');
+        setIsFavorite(favs.includes(game.name));
+      }
+    };
+    const onFavUpdated = () => updateFromLocal();
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === 'hideout_game_favorites') updateFromLocal();
+    };
+    window.addEventListener('hideout:favorites-updated', onFavUpdated as any);
+    window.addEventListener('storage', onStorage);
+    return () => {
+      window.removeEventListener('hideout:favorites-updated', onFavUpdated as any);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, [game?.name]);
+
   const toggleFavorite = async () => {
     if (!game) return;
 
@@ -71,6 +91,7 @@ const GamePlayer = () => {
 
     localStorage.setItem('hideout_game_favorites', JSON.stringify(localFavorites));
     setIsFavorite(newIsFavorite);
+    window.dispatchEvent(new CustomEvent('hideout:favorites-updated', { detail: { favorites: localFavorites } }));
 
     // Sync to database if logged in
     if (user) {

@@ -211,13 +211,18 @@ const Browser = () => {
     setError(null);
 
     try {
-      // Use edge function to proxy the site
-      const functionBase = 'https://ezxrjflznhydrmmblxni.functions.supabase.co/http-proxy';
-      const proxiedUrl = `${functionBase}?url=${encodeURIComponent(url)}`;
-
+      // Use edge function to proxy the site and return HTML (with auth attached)
       const hostname = new URL(url).hostname;
 
-      // Update tab with proxied URL
+      const { data, error } = await supabase.functions.invoke('web-proxy', {
+        body: { url }
+      });
+
+      if (error || !data?.success || !data?.html) {
+        throw new Error((data as any)?.error || error?.message || 'Failed to load page via proxy');
+      }
+
+      // Update tab with srcDoc HTML
       setTabs(prev => prev.map(tab => {
         if (tab.id === tabId) {
           const newHistory = tab.history.slice(0, tab.historyIndex + 1);
@@ -225,8 +230,8 @@ const Browser = () => {
           return {
             ...tab,
             url,
-            proxiedUrl,
-            proxiedHtml: undefined,
+            proxiedUrl: '',
+            proxiedHtml: data.html,
             title: hostname,
             history: newHistory,
             historyIndex: newHistory.length - 1
@@ -615,7 +620,8 @@ const Browser = () => {
           ) : (
             <iframe
               ref={iframeRef}
-              src={activeTab.proxiedUrl || 'about:blank'}
+              src={'about:blank'}
+              srcDoc={activeTab.proxiedHtml || undefined}
               className="w-full h-full border-0 transition-transform duration-200"
               style={{ transform: `scale(${zoom})`, transformOrigin: 'top left' }}
               sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads allow-top-navigation allow-modals"
