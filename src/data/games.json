@@ -1,12 +1,5 @@
 [
   {
-    "name": "1",
-    "icon": "https://hideout-games.vercel.app/1/favicon.ico",
-    "popularity": [],
-    "categories": ["Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/1/index.html"
-  },
-  {
     "name": "10 Minutes Till Dawn",
     "icon": "https://hideout-games.vercel.app/10-minutes-till-dawn/splash.png",
     "popularity": [],
@@ -14,46 +7,11 @@
     "gameLink": "https://hideout-games.vercel.app/10-minutes-till-dawn/index.html"
   },
   {
-    "name": "100ng",
-    "icon": "https://hideout-games.vercel.app/100ng/100ng.jpg",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/100ng/100ng.jpg"
-  },
-  {
-    "name": "1v1.LOL",
-    "icon": "https://hideout-games.vercel.app/1v1lol/splash.png",
-    "popularity": ["hot"],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/1v1lol/index.html"
-  },
-  {
-    "name": "1v1.space",
-    "icon": "https://hideout-games.vercel.app/1v1space/splash.png",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/1v1space/index.html"
-  },
-  {
-    "name": "2048 Multitask",
-    "icon": "https://play-lh.googleusercontent.com/5JrXBphEEsLGqTbdEUKzmfjT2QWuQOI_CwU7r6G53SBNRrSRj1VFL4CY6Ue19z9irYQr",
-    "popularity": [],
-    "categories": ["Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/2048-multitask/index.html"
-  },
-  {
     "name": "2048",
     "icon": "https://play-lh.googleusercontent.com/5JrXBphEEsLGqTbdEUKzmfjT2QWuQOI_CwU7r6G53SBNRrSRj1VFL4CY6Ue19z9irYQr",
-    "popularity": ["popular"],
+    "popularity": [],
     "categories": ["Puzzle", "Classic"],
     "gameLink": "https://hideout-games.vercel.app/2048/index.html"
-  },
-  {
-    "name": "9007199254740992",
-    "icon": "https://hideout-games.vercel.app/9007199254740992/splash.png",
-    "popularity": [],
-    "categories": ["Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/9007199254740992/logo-4.png"
   },
   {
     "name": "DogeMiner",
@@ -70,46 +28,11 @@
     "gameLink": "https://hideout-games.vercel.app/HexGL/index.html"
   },
   {
-    "name": "Offline Paradise",
-    "icon": "https://store-images.s-microsoft.com/image/apps.14874.13900150574023001.4f91d583-75ac-4b12-97dc-604df3e808b2.ac9bfde0-3dfb-495c-b9a5-c4ac4fb21505?q=90&w=512&h=768&mode=crop&format=jpg&background=%230078D7",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/OfflineParadise/index.html"
-  },
-  {
     "name": "Stickman Survival",
     "icon": "https://hideout-games.vercel.app/Stickman-Survival/Icon.png",
     "popularity": [],
     "categories": ["Action"],
     "gameLink": "https://hideout-games.vercel.app/Stickman-Survival/index.html"
-  },
-  {
-    "name": "A Dance of Fire and Ice",
-    "icon": "https://hideout-games.vercel.app/a-dance-of-fire-and-ice/splash.png",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/a-dance-of-fire-and-ice/index.html"
-  },
-  {
-    "name": "Achievement Unlocked",
-    "icon": "https://hideout-games.vercel.app/achievementunlocked/achievementunlocked.png",
-    "popularity": [],
-    "categories": ["Arcade", "Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/achievementunlocked/index.html"
-  },
-  {
-    "name": "A Dark Room",
-    "icon": "https://hideout-games.vercel.app/adarkroom/splash.png",
-    "popularity": [],
-    "categories": ["Simulation", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/adarkroom/index.html"
-  },
-  {
-    "name": "Adrenaline Challenge",
-    "icon": "https://hideout-games.vercel.app/adrenalinechallenge/adrenalinechallenge.jpg",
-    "popularity": [],
-    "categories": ["Racing", "Sports"],
-    "gameLink": "https://hideout-games.vercel.app/adrenalinechallenge/index.html"
   },
   {
     "name": "Adventure Drivers",
@@ -126,30 +49,9 @@
     "gameLink": "https://hideout-games.vercel.app/ages-of-conflict/index.html"
   },
   {
-    "name": "Alien Hominid",
-    "icon": "https://hideout-games.vercel.app/alienhominid/alienhominid.jpg",
-    "popularity": [],
-    "categories": ["Action", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/alienhominid/index.html"
-  },
-  {
-    "name": "Align 4",
-    "icon": "https://hideout-games.vercel.app/align-4/board.png",
-    "popularity": [],
-    "categories": ["Puzzle", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/align-4/index.html"
-  },
-  {
-    "name": "Amidst the Clouds",
-    "icon": "https://hideout-games.vercel.app/amidst-the-clouds/splash.png",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/amidst-the-clouds/index.html"
-  },
-  {
     "name": "Among Us",
     "icon": "https://hideout-games.vercel.app/among-us/red.png",
-    "popularity": ["hot"],
+    "popularity": [],
     "categories": ["Strategy"],
     "gameLink": "https://hideout-games.vercel.app/among-us/index.html"
   },
@@ -166,20 +68,6 @@
     "popularity": [],
     "categories": ["Racing"],
     "gameLink": "https://hideout-games.vercel.app/aquapark-slides/index.html"
-  },
-  {
-    "name": "Astray",
-    "icon": "https://hideout-games.vercel.app/astray/splash.png",
-    "popularity": [],
-    "categories": ["Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/astray/index.html"
-  },
-  {
-    "name": "Avalanche",
-    "icon": "https://hideout-games.vercel.app/avalanche/avalanche.png",
-    "popularity": [],
-    "categories": ["Action", "Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/avalanche/index.html"
   },
   {
     "name": "Awesome Tanks 2",
@@ -224,13 +112,6 @@
     "gameLink": "https://hideout-games.vercel.app/baldis-basics/index.html"
   },
   {
-    "name": "Ballistic Chickens",
-    "icon": "https://hideout-games.vercel.app/ballistic-chickens/logo.png",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/ballistic-chickens/index.html"
-  },
-  {
     "name": "Basket Random",
     "icon": "https://hideout-games.vercel.app/basket-random/splash.jpeg",
     "popularity": [],
@@ -252,14 +133,7 @@
     "gameLink": "https://hideout-games.vercel.app/basketbros-io/index.html"
   },
   {
-    "name": "Battle for Gondor",
-    "icon": "https://hideout-games.vercel.app/battleforgondor/battleforgondor.JPG",
-    "popularity": [],
-    "categories": ["Strategy", "Action"],
-    "gameLink": "https://hideout-games.vercel.app/battleforgondor/index.html"
-  },
-  {
-    "name": "Big Red Button",
+    "name": "The Big Red Button",
     "icon": "https://hideout-games.vercel.app/bigredbutton/bigredbutton.png",
     "popularity": [],
     "categories": ["Simulation"],
@@ -271,20 +145,6 @@
     "popularity": [],
     "categories": ["Simulation"],
     "gameLink": "https://hideout-games.vercel.app/bitlife/index.html"
-  },
-  {
-    "name": "Black Hole Square",
-    "icon": "https://hideout-games.vercel.app/blacholesquare/icon.png",
-    "popularity": [],
-    "categories": ["Puzzle", "Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/blacholesquare/index.html"
-  },
-  {
-    "name": "Black Knight",
-    "icon": "https://www3.minijuegosgratis.com/v3/games/thumbnails/4015_7_sq.jpg",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/blackknight/index.html"
   },
   {
     "name": "Bloons TD",
@@ -343,34 +203,6 @@
     "gameLink": "https://hideout-games.vercel.app/breakingthebank/index.html"
   },
   {
-    "name": "Big Tower Tiny Square",
-    "icon": "https://hideout-games.vercel.app/btts/logonew.png",
-    "popularity": [],
-    "categories": ["Strategy"],
-    "gameLink": "https://hideout-games.vercel.app/btts/index.html"
-  },
-  {
-    "name": "Burger and Frights",
-    "icon": "https://hideout-games.vercel.app/burger-and-frights/splash.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/burger-and-frights/index.html"
-  },
-  {
-    "name": "Cannon Basketball 4",
-    "icon": "https://hideout-games.vercel.app/cannon-basketball-4/img/splash.png",
-    "popularity": [],
-    "categories": ["Puzzle", "Sports"],
-    "gameLink": "https://hideout-games.vercel.app/cannon-basketball-4/index.html"
-  },
-  {
-    "name": "Canyon Defense",
-    "icon": "https://hideout-games.vercel.app/canyondefense/canyondefense.png",
-    "popularity": [],
-    "categories": ["Strategy"],
-    "gameLink": "https://hideout-games.vercel.app/canyondefense/index.html"
-  },
-  {
     "name": "Cars Simulator",
     "icon": "https://hideout-games.vercel.app/cars-simulator/splash.png",
     "popularity": [],
@@ -397,13 +229,6 @@
     "popularity": [],
     "categories": ["Action", "Strategy"],
     "gameLink": "https://hideout-games.vercel.app/championarcher/index.html"
-  },
-  {
-    "name": "Chill Radio",
-    "icon": "https://hideout-games.vercel.app/chill-radio/img/icon.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/chill-radio/index.html"
   },
   {
     "name": "Chrome Dino",
@@ -434,25 +259,11 @@
     "gameLink": "https://hideout-games.vercel.app/cnpingpong/index.html"
   },
   {
-    "name": "Connect 3",
-    "icon": "https://hideout-games.vercel.app/connect3/connect3.png",
-    "popularity": [],
-    "categories": ["Puzzle", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/connect3/index.html"
-  },
-  {
     "name": "Cookie Clicker",
     "icon": "https://hideout-games.vercel.app/cookie-clicker/cookieclicker.png",
     "popularity": ["popular"],
     "categories": ["Arcade", "Simulation"],
     "gameLink": "https://hideout-games.vercel.app/cookie-clicker/index.html"
-  },
-  {
-    "name": "Core Ball",
-    "icon": "https://hideout-games.vercel.app/core-ball/pr_source.png",
-    "popularity": [],
-    "categories": ["Arcade", "Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/core-ball/index.html"
   },
   {
     "name": "Craftmine",
@@ -476,13 +287,6 @@
     "gameLink": "https://hideout-games.vercel.app/crossyroad/index.html"
   },
   {
-    "name": "CS:GO Clicker",
-    "icon": "https://avatars.githubusercontent.com/u/39322951?s=280&v=4",
-    "popularity": [],
-    "categories": ["Arcade", "Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/csgo-clicker/index.html"
-  },
-  {
     "name": "Cut The Rope: Holiday",
     "icon": "https://hideout-games.vercel.app/ctr-holiday/Holiday_Gift.webp",
     "popularity": [],
@@ -502,34 +306,6 @@
     "popularity": [],
     "categories": ["Puzzle", "Classic"],
     "gameLink": "https://hideout-games.vercel.app/ctr/index.html"
-  },
-  {
-    "name": "Cubefield",
-    "icon": "https://hideout-games.vercel.app/cubefield/assets/unnamed.png",
-    "popularity": [],
-    "categories": ["Arcade", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/cubefield/index.html"
-  },
-  {
-    "name": "Cupcake 2048",
-    "icon": "https://hideout-games.vercel.app/cupcake2048/favicon.png",
-    "popularity": [],
-    "categories": ["Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/cupcake2048/index.html"
-  },
-  {
-    "name": "Dante",
-    "icon": "https://hideout-games.vercel.app/dante/splash.png",
-    "popularity": [],
-    "categories": ["Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/dante/index.html"
-  },
-  {
-    "name": "Deal or No Deal",
-    "icon": "https://hideout-games.vercel.app/deal-or-no-deal/index.jpg",
-    "popularity": [],
-    "categories": ["Puzzle", "Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/deal-or-no-deal/index.html"
   },
   {
     "name": "Death Run 3D",
@@ -567,27 +343,6 @@
     "gameLink": "https://hideout-games.vercel.app/dogeminer2/index.html"
   },
   {
-    "name": "Doodle Jump",
-    "icon": "https://hideout-games.vercel.app/doodle-jump/doodle.png",
-    "popularity": [],
-    "categories": ["Arcade", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/doodle-jump/index.html"
-  },
-  {
-    "name": "Double Wires",
-    "icon": "https://hideout-games.vercel.app/doublewires/doublewires.png",
-    "popularity": [],
-    "categories": ["Action", "Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/doublewires/index.html"
-  },
-  {
-    "name": "Dragon vs Bricks",
-    "icon": "https://hideout-games.vercel.app/dragon-vs-bricks/files/splash.jpg",
-    "popularity": [],
-    "categories": ["Arcade", "Action"],
-    "gameLink": "https://hideout-games.vercel.app/dragon-vs-bricks/index.html"
-  },
-  {
     "name": "Drake vs Kendrick",
     "icon": "https://hideout-games.vercel.app/drakevskendrick/image_2024-05-27_170943780.png",
     "popularity": [],
@@ -600,13 +355,6 @@
     "popularity": [],
     "categories": ["Racing", "Puzzle"],
     "gameLink": "https://hideout-games.vercel.app/draw-the-hill/index.html"
-  },
-  {
-    "name": "Dr. Doe's",
-    "icon": "https://hideout-games.vercel.app/drdoe/image.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/drdoe/index.html"
   },
   {
     "name": "Drift Boss",
@@ -659,38 +407,10 @@
   },
   {
     "name": "Edge Surf",
-    "icon": "https://hideout-games.vercel.app/edge-surf/splash.png",
+    "icon": "https://hideout-games.vercel.app/edge-surf/edgesurf.jpg",
     "popularity": [],
     "categories": ["Arcade", "Racing"],
     "gameLink": "https://hideout-games.vercel.app/edge-surf/index.html"
-  },
-  {
-    "name": "Edge Not Found",
-    "icon": "https://hideout-games.vercel.app/edgenotfound/edge.png",
-    "popularity": [],
-    "categories": ["Arcade", "Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/edgenotfound/index.html"
-  },
-  {
-    "name": "Eel Slap",
-    "icon": "https://hideout-games.vercel.app/eel-slap/eel-slap.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/eel-slap/index.html"
-  },
-  {
-    "name": "Elastic Man",
-    "icon": "https://hideout-games.vercel.app/elasticman/elasticman.jpg",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/elasticman/index.html"
-  },
-  {
-    "name": "Endless War 3",
-    "icon": "https://hideout-games.vercel.app/endlesswar3/endlesswar3.png",
-    "popularity": [],
-    "categories": ["Action", "Strategy"],
-    "gameLink": "https://hideout-games.vercel.app/endlesswar3/index.html"
   },
   {
     "name": "Escaping the Prison",
@@ -707,39 +427,11 @@
     "gameLink": "https://hideout-games.vercel.app/evil-glitch/index.html"
   },
   {
-    "name": "Evolution",
-    "icon": "https://hideout-games.vercel.app/evolution/splash.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/evolution/index.html"
-  },
-  {
-    "name": "Exo",
-    "icon": "https://hideout-games.vercel.app/exo/img/small.jpg",
-    "popularity": [],
-    "categories": ["Action", "Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/exo/index.html"
-  },
-  {
-    "name": "Factory Balls",
-    "icon": "https://hideout-games.vercel.app/factoryballs/images/splash.png",
-    "popularity": [],
-    "categories": ["Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/factoryballs/index.html"
-  },
-  {
     "name": "Fair Squares",
     "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0ef2xbI5qHENnFHFliMf5RF3VcRDjxIj_1g&s",
     "popularity": [],
     "categories": ["Puzzle"],
     "gameLink": "https://hideout-games.vercel.app/fairsquares/index.html"
-  },
-  {
-    "name": "Fake Virus",
-    "icon": "https://hideout-games.vercel.app/fake-virus/icon.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/fake-virus/index.html"
   },
   {
     "name": "Fancy Pants Adventures",
@@ -754,13 +446,6 @@
     "popularity": [],
     "categories": ["Puzzle", "Classic"],
     "gameLink": "https://hideout-games.vercel.app/fireboywatergirlforesttemple/index.html"
-  },
-  {
-    "name": "Flappy 2048",
-    "icon": "https://hideout-games.vercel.app/flappy-2048/favicon.ico",
-    "popularity": [],
-    "categories": ["Arcade", "Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/flappy-2048/index.html"
   },
   {
     "name": "Flappy Bird",
@@ -798,13 +483,6 @@
     "gameLink": "https://hideout-games.vercel.app/fridaynightfunkin/index.html"
   },
   {
-    "name": "Froggy's Battle",
-    "icon": "https://hideout-games.vercel.app/froggys-battle/splash.png",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/froggys-battle/index.html"
-  },
-  {
     "name": "Fruit Ninja",
     "icon": "https://hideout-games.vercel.app/fruitninja/FruitNinjaTeaser.jpg",
     "popularity": [],
@@ -817,13 +495,6 @@
     "popularity": [],
     "categories": ["Simulation"],
     "gameLink": "https://hideout-games.vercel.app/frying-nemo/index.html"
-  },
-  {
-    "name": "A Game Inside a Game",
-    "icon": "https://hideout-games.vercel.app/game-inside/img/display.png",
-    "popularity": [],
-    "categories": ["Puzzle", "Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/game-inside/index.html"
   },
   {
     "name": "Generic Fishing Game",
@@ -854,46 +525,11 @@
     "gameLink": "https://hideout-games.vercel.app/getaway-shootout/index.html"
   },
   {
-    "name": "Gimme the Airpod",
-    "icon": "https://hideout-games.vercel.app/gimme-the-airpod/img/logo.png",
-    "popularity": [],
-    "categories": ["Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/gimme-the-airpod/index.html"
-  },
-  {
-    "name": "Glass City",
-    "icon": "https://hideout-games.vercel.app/glass-city/image.png",
-    "popularity": [],
-    "categories": ["Simulation", "Strategy"],
-    "gameLink": "https://hideout-games.vercel.app/glass-city/index.html"
-  },
-  {
-    "name": "Go Ball",
-    "icon": "https://hideout-games.vercel.app/go-ball/game.jpg",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/go-ball/index.html"
-  },
-  {
-    "name": "Goodnight",
-    "icon": "https://hideout-games.vercel.app/goodnight/goodnight.jpg",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/goodnight/index.html"
-  },
-  {
     "name": "Google Feud",
     "icon": "https://hideout-games.vercel.app/google-feud/splash.png",
     "popularity": [],
     "categories": ["Puzzle"],
     "gameLink": "https://hideout-games.vercel.app/google-feud/index.html"
-  },
-  {
-    "name": "Google Snake",
-    "icon": "https://hideout-games.vercel.app/google-snake/img/snake.png",
-    "popularity": [],
-    "categories": ["Classic", "Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/google-snake/index.html"
   },
   {
     "name": "Gravity Soccer",
@@ -910,13 +546,6 @@
     "gameLink": "https://hideout-games.vercel.app/greybox/index.html"
   },
   {
-    "name": "Grindcraft",
-    "icon": "https://hideout-games.vercel.app/grindcraft/img/splash.png",
-    "popularity": [],
-    "categories": ["Arcade", "Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/grindcraft/index.html"
-  },
-  {
     "name": "Hacker Typer",
     "icon": "https://hideout-games.vercel.app/hackertype/favicon.ico",
     "popularity": [],
@@ -924,32 +553,11 @@
     "gameLink": "https://hideout-games.vercel.app/hackertype/index.html"
   },
   {
-    "name": "Handshakes",
-    "icon": "https://hideout-games.vercel.app/handshakes/splaher.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/handshakes/index.html"
-  },
-  {
     "name": "Happy Hop",
     "icon": "https://hideout-games.vercel.app/happy-hop/splash.png",
     "popularity": [],
     "categories": ["Arcade"],
     "gameLink": "https://hideout-games.vercel.app/happy-hop/index.html"
-  },
-  {
-    "name": "Hover Bot Arena",
-    "icon": "https://hideout-games.vercel.app/hba/hoverbotarena.JPG",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/hba/index.html"
-  },
-  {
-    "name": "Helicopter",
-    "icon": "https://hideout-games.vercel.app/helicopter/helicopter.png",
-    "popularity": [],
-    "categories": ["Arcade", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/helicopter/index.html"
   },
   {
     "name": "Hex Empire",
@@ -973,32 +581,11 @@
     "gameLink": "https://hideout-games.vercel.app/hungry-lamu/index.html"
   },
   {
-    "name": "Idle Breakout",
-    "icon": "https://hideout-games.vercel.app/idle-breakout/img/thumbnail.png",
-    "popularity": [],
-    "categories": ["Arcade", "Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/idle-breakout/index.html"
-  },
-  {
-    "name": "Idle Shark",
-    "icon": "https://hideout-games.vercel.app/idle-shark/logo.png",
-    "popularity": [],
-    "categories": ["Arcade", "Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/idle-shark/index.html"
-  },
-  {
     "name": "The Impossible Quiz",
     "icon": "https://hideout-games.vercel.app/impossiblequiz/impossiblequiz.png",
     "popularity": [],
     "categories": ["Puzzle", "Classic"],
     "gameLink": "https://hideout-games.vercel.app/impossiblequiz/index.html"
-  },
-  {
-    "name": "Interactive Buddy",
-    "icon": "https://hideout-games.vercel.app/interactivebuddy/interactivebuddy.jpg",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/interactivebuddy/index.html"
   },
   {
     "name": "Jetpack Joyride",
@@ -1013,20 +600,6 @@
     "popularity": [],
     "categories": ["Action"],
     "gameLink": "https://hideout-games.vercel.app/just-fall/index.html"
-  },
-  {
-    "name": "Just One Boss",
-    "icon": "https://hideout-games.vercel.app/just-one-boss/pv1Gr5.png",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/just-one-boss/index.html"
-  },
-  {
-    "name": "Kitchen Gun Game",
-    "icon": "https://hideout-games.vercel.app/kitchen-gun-game/splash.png",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/kitchen-gun-game/index.html"
   },
   {
     "name": "Kitten Cannon",
@@ -1078,27 +651,6 @@
     "gameLink": "https://hideout-games.vercel.app/madalin-stunt-cars-3/index.html"
   },
   {
-    "name": "Mario",
-    "icon": "https://imgix.bustle.com/inverse/3a/d8/88/31/39e3/4b37/b6b4/588165482936/smbboxart.png?w=400&h=300&fit=crop&crop=faces&dpr=2",
-    "popularity": [],
-    "categories": ["Arcade", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/mario/index.html"
-  },
-  {
-    "name": "Marvin Spectrum",
-    "icon": "https://hideout-games.vercel.app/marvinspectrum/marvinspectrum.png",
-    "popularity": [],
-    "categories": ["Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/marvinspectrum/index.html"
-  },
-  {
-    "name": "Matrix Rampage",
-    "icon": "https://hideout-games.vercel.app/matrixrampage/matrixrampage.jpg",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/matrixrampage/index.html"
-  },
-  {
     "name": "Merge Round Racers",
     "icon": "https://hideout-games.vercel.app/merge-round-racers/splash.png",
     "popularity": [],
@@ -1113,13 +665,6 @@
     "gameLink": "https://hideout-games.vercel.app/mineblocks/index.html"
   },
   {
-    "name": "Minecraft 1.5",
-    "icon": "https://www.rw-designer.com/icon-image/5547-256x256x8.png",
-    "popularity": [],
-    "categories": ["Simulation", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/minecraft-15/index.html"
-  },
-  {
     "name": "Minecraft 1.8",
     "icon": "https://hideout-games.vercel.app/minecraft-18/splash.png",
     "popularity": [],
@@ -1129,30 +674,9 @@
   {
     "name": "Minecraft Classic",
     "icon": "https://hideout-games.vercel.app/minecraft-classic/pack.png",
-    "popularity": ["popular"],
+    "popularity": [],
     "categories": ["Simulation", "Classic"],
     "gameLink": "https://hideout-games.vercel.app/minecraft-classic/index.html"
-  },
-  {
-    "name": "Minecraft Beta",
-    "icon": "https://hideout-games.vercel.app/minecraftbeta/bg_main.png",
-    "popularity": [],
-    "categories": ["Simulation", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/minecraftbeta/index.html"
-  },
-  {
-    "name": "Minesweeper",
-    "icon": "https://hideout-games.vercel.app/minesweeper/img/minesweeper.png",
-    "popularity": [],
-    "categories": ["Puzzle", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/minesweeper/index.html"
-  },
-  {
-    "name": "Mini Putt",
-    "icon": "https://hideout-games.vercel.app/miniputt/miniputt.png",
-    "popularity": [],
-    "categories": ["Sports", "Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/miniputt/index.html"
   },
   {
     "name": "Missiles",
@@ -1204,20 +728,6 @@
     "gameLink": "https://hideout-games.vercel.app/my-rusty-submarine/index.html"
   },
   {
-    "name": "N-Gon",
-    "icon": "https://hideout-games.vercel.app/n-gon/bot.png",
-    "popularity": [],
-    "categories": ["Action", "Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/n-gon/index.html"
-  },
-  {
-    "name": "Ninja",
-    "icon": "https://hideout-games.vercel.app/ninja/logo1.png",
-    "popularity": [],
-    "categories": ["Arcade", "Action"],
-    "gameLink": "https://hideout-games.vercel.app/ninja/index.html"
-  },
-  {
     "name": "Ninja vs Evil Corp",
     "icon": "https://hideout-games.vercel.app/ninjavsevilcorp/splash.png",
     "popularity": [],
@@ -1230,20 +740,6 @@
     "popularity": [],
     "categories": ["Arcade"],
     "gameLink": "https://hideout-games.vercel.app/noob-steve-parkour/index.html"
-  },
-  {
-    "name": "NS-Shaft",
-    "icon": "https://hideout-games.vercel.app/ns-shaft/icon.png",
-    "popularity": [],
-    "categories": ["Arcade", "Action"],
-    "gameLink": "https://hideout-games.vercel.app/ns-shaft/index.html"
-  },
-  {
-    "name": "Neon Square Resurgence",
-    "icon": "https://hideout-games.vercel.app/nsresurgence/neon.png",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/nsresurgence/index.html"
   },
   {
     "name": "Om Bounce",
@@ -1261,7 +757,7 @@
   },
   {
     "name": "Pandemic 2",
-    "icon": "https://hideout-games.vercel.app/pandemic2/pandemic2.png",
+    "icon": "https://hideout-games.vercel.app/pandemic2/logo.png",
     "popularity": [],
     "categories": ["Strategy", "Simulation"],
     "gameLink": "https://hideout-games.vercel.app/pandemic2/index.html"
@@ -1295,32 +791,11 @@
     "gameLink": "https://hideout-games.vercel.app/papery-planes/index.html"
   },
   {
-    "name": "Particle Clicker",
-    "icon": "https://hideout-games.vercel.app/particle-clicker/assets/pc32@2x.png",
-    "popularity": [],
-    "categories": ["Arcade", "Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/particle-clicker/index.html"
-  },
-  {
     "name": "Pixel Gun Survival",
     "icon": "https://hideout-games.vercel.app/pixel-gun-survival/512x512.png",
     "popularity": [],
     "categories": ["Action"],
     "gameLink": "https://hideout-games.vercel.app/pixel-gun-survival/index.html"
-  },
-  {
-    "name": "Polybranch",
-    "icon": "https://hideout-games.vercel.app/polybranch/img/pic1.png",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/polybranch/index.html"
-  },
-  {
-    "name": "Popcat Classic",
-    "icon": "https://hideout-games.vercel.app/popcat-classic/splash.png",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/popcat-classic/index.html"
   },
   {
     "name": "Portal Flash",
@@ -1335,20 +810,6 @@
     "popularity": [],
     "categories": ["Simulation"],
     "gameLink": "https://hideout-games.vercel.app/precision-client/index.html"
-  },
-  {
-    "name": "Protektor",
-    "icon": "https://hideout-games.vercel.app/protektor/splash.jpg",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/protektor/index.html"
-  },
-  {
-    "name": "Push the Square",
-    "icon": "https://hideout-games.vercel.app/push-the-square/img/splash.png",
-    "popularity": [],
-    "categories": ["Puzzle", "Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/push-the-square/index.html"
   },
   {
     "name": "Push Your Luck",
@@ -1377,13 +838,6 @@
     "popularity": [],
     "categories": ["Puzzle", "Arcade"],
     "gameLink": "https://hideout-games.vercel.app/rabbit-samurai2/index.html"
-  },
-  {
-    "name": "Resent Client",
-    "icon": "https://hideout-games.vercel.app/resent-client/splash.jpg",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/resent-client/index.html"
   },
   {
     "name": "Retro Bowl",
@@ -1429,7 +883,7 @@
   },
   {
     "name": "Riddle Transfer",
-    "icon": "https://hideout-games.vercel.app/riddletransfer/Riddle Transfer",
+    "icon": "https://hideout-games.vercel.app/riddletransfer/riddletransfer.png",
     "popularity": [],
     "categories": ["Puzzle", "Classic"],
     "gameLink": "https://hideout-games.vercel.app/riddletransfer/index.html"
@@ -1440,20 +894,6 @@
     "popularity": [],
     "categories": ["Puzzle", "Classic"],
     "gameLink": "https://hideout-games.vercel.app/riddletransfer2/index.html"
-  },
-  {
-    "name": "Rolling Forests",
-    "icon": "https://hideout-games.vercel.app/rolling-forests/icon.png",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/rolling-forests/index.html"
-  },
-  {
-    "name": "Rolly Vortex",
-    "icon": "https://hideout-games.vercel.app/rolly-vortex/icon-256.png",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/rolly-vortex/index.html"
   },
   {
     "name": "Rooftop Snipers",
@@ -1471,31 +911,10 @@
   },
   {
     "name": "Sand Game",
-    "icon": "https://hideout-games.vercel.app/sand-game/sand-game.PNG",
+    "icon": "https://hideout-games.vercel.app/sand-game/sandicon.png",
     "popularity": [],
     "categories": ["Simulation"],
     "gameLink": "https://hideout-games.vercel.app/sand-game/index.html"
-  },
-  {
-    "name": "Sandboxels",
-    "icon": "https://hideout-games.vercel.app/sandboxels/sandboxels.jpg",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/sandboxels/index.html"
-  },
-  {
-    "name": "Santy is Home",
-    "icon": "https://hideout-games.vercel.app/santy-is-home/splash.png",
-    "popularity": [],
-    "categories": ["Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/santy-is-home/index.html"
-  },
-  {
-    "name": "Scrap Metal",
-    "icon": "https://hideout-games.vercel.app/scrapmetal/img/splash.png",
-    "popularity": [],
-    "categories": ["Racing", "Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/scrapmetal/index.html"
   },
   {
     "name": "Shell Shockers",
@@ -1505,32 +924,11 @@
     "gameLink": "https://hideout-games.vercel.app/shellshockers/index.html"
   },
   {
-    "name": "Shot in the Dark",
-    "icon": "https://hideout-games.vercel.app/shotinthedark/shot.png",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/shotinthedark/index.html"
-  },
-  {
-    "name": "Shuttle Deck",
-    "icon": "https://hideout-games.vercel.app/shuttledeck/splash.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/shuttledeck/index.html"
-  },
-  {
     "name": "Sky Car Stunt",
     "icon": "https://hideout-games.vercel.app/sky-car-stunt/512x512.jpg",
     "popularity": [],
     "categories": ["Racing"],
     "gameLink": "https://hideout-games.vercel.app/sky-car-stunt/index.html"
-  },
-  {
-    "name": "Slap the Monkey",
-    "icon": "https://hideout-games.vercel.app/slap-the-monkey/splash.png",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/slap-the-monkey/index.html"
   },
   {
     "name": "Slime Rush TD",
@@ -1547,25 +945,11 @@
     "gameLink": "https://hideout-games.vercel.app/slope-2/index.html"
   },
   {
-    "name": "Slope Ball",
-    "icon": "https://hideout-games.vercel.app/slope-ball/icon.jpg",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/slope-ball/index.html"
-  },
-  {
     "name": "Slope",
     "icon": "https://hideout-games.vercel.app/slope/slope4.jpeg",
-    "popularity": ["popular"],
+    "popularity": ["hot"],
     "categories": ["Arcade"],
     "gameLink": "https://hideout-games.vercel.app/slope/index.html"
-  },
-  {
-    "name": "Super Mario 64",
-    "icon": "https://hideout-games.vercel.app/sm64/logo.png",
-    "popularity": [],
-    "categories": ["Classic"],
-    "gameLink": "https://hideout-games.vercel.app/sm64/index.html"
   },
   {
     "name": "Smash Karts",
@@ -1573,13 +957,6 @@
     "popularity": ["hot"],
     "categories": ["Action", "Racing"],
     "gameLink": "https://hideout-games.vercel.app/smashkarts/index.html"
-  },
-  {
-    "name": "Smoking Barrels",
-    "icon": "https://hideout-games.vercel.app/smokingbarrels/smokingbarrels.jpg",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/smokingbarrels/index.html"
   },
   {
     "name": "Snowbattle",
@@ -1603,13 +980,6 @@
     "gameLink": "https://hideout-games.vercel.app/soccer-skills/index.html"
   },
   {
-    "name": "Soldier Legend",
-    "icon": "https://hideout-games.vercel.app/soldier-legend/images/logo.jpg",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/soldier-legend/index.html"
-  },
-  {
     "name": "Solitaire",
     "icon": "https://hideout-games.vercel.app/solitaire/img/hover.jpg",
     "popularity": [],
@@ -1622,34 +992,6 @@
     "popularity": [],
     "categories": ["Strategy", "Simulation"],
     "gameLink": "https://hideout-games.vercel.app/sort-the-court/index.html"
-  },
-  {
-    "name": "Soundboard",
-    "icon": "https://hideout-games.vercel.app/soundboard/splash.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/soundboard/index.html"
-  },
-  {
-    "name": "Space Company",
-    "icon": "https://hideout-games.vercel.app/space-company/whiteLogo.png",
-    "popularity": [],
-    "categories": ["Simulation", "Strategy"],
-    "gameLink": "https://hideout-games.vercel.app/space-company/index.html"
-  },
-  {
-    "name": "Space Garden",
-    "icon": "https://hideout-games.vercel.app/spacegarden/spl.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/spacegarden/index.html"
-  },
-  {
-    "name": "Spinning Rat",
-    "icon": "https://hideout-games.vercel.app/spinningrat/favicon-32x32.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/spinningrat/index.html"
   },
   {
     "name": "Stack Bump 3D",
@@ -1708,13 +1050,6 @@
     "gameLink": "https://hideout-games.vercel.app/stick-merge/index.html"
   },
   {
-    "name": "Stickman Boost",
-    "icon": "https://hideout-games.vercel.app/stickman-boost/icon-256.png",
-    "popularity": [],
-    "categories": ["Arcade", "Action"],
-    "gameLink": "https://hideout-games.vercel.app/stickman-boost/index.html"
-  },
-  {
     "name": "Stickman Golf",
     "icon": "https://hideout-games.vercel.app/stickman-golf/splash.png",
     "popularity": [],
@@ -1736,13 +1071,6 @@
     "gameLink": "https://hideout-games.vercel.app/stickwar/index.html"
   },
   {
-    "name": "Storm the House 2",
-    "icon": "https://hideout-games.vercel.app/stormthehouse2/stormthehouse2.jpg",
-    "popularity": [],
-    "categories": ["Action", "Strategy"],
-    "gameLink": "https://hideout-games.vercel.app/stormthehouse2/index.html"
-  },
-  {
     "name": "Subway Surfers: New York",
     "icon": "https://hideout-games.vercel.app/subway-surfers-ny/NewYorkIcon.png",
     "popularity": [],
@@ -1755,20 +1083,6 @@
     "popularity": ["popular"],
     "categories": ["Arcade", "Classic"],
     "gameLink": "https://hideout-games.vercel.app/subway-surfers/index.html"
-  },
-  {
-    "name": "Superhot",
-    "icon": "https://hideout-games.vercel.app/superhot/hot.jpg",
-    "popularity": [],
-    "categories": ["Action", "Strategy"],
-    "gameLink": "https://hideout-games.vercel.app/superhot/index.html"
-  },
-  {
-    "name": "Super Mario Construct",
-    "icon": "https://hideout-games.vercel.app/supermarioconstruct/icons/icon-256.png",
-    "popularity": [],
-    "categories": ["Classic", "Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/supermarioconstruct/index.html"
   },
   {
     "name": "Surviv.io",
@@ -1790,13 +1104,6 @@
     "popularity": [],
     "categories": ["Arcade"],
     "gameLink": "https://hideout-games.vercel.app/swerve/index.html"
-  },
-  {
-    "name": "Synesthesia",
-    "icon": "https://hideout-games.vercel.app/synesthesia/index.splash.png",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/synesthesia/index.html"
   },
   {
     "name": "Tactical Weapon Pack 2",
@@ -1834,32 +1141,11 @@
     "gameLink": "https://hideout-games.vercel.app/temple-run-2/index.html"
   },
   {
-    "name": "The Final Earth",
-    "icon": "https://hideout-games.vercel.app/the-final-earth/images.png",
-    "popularity": [],
-    "categories": ["Strategy", "Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/the-final-earth/index.html"
-  },
-  {
-    "name": "The Hotel",
-    "icon": "https://hideout-games.vercel.app/the-hotel/splash.png",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/the-hotel/index.html"
-  },
-  {
     "name": "The Battle",
     "icon": "https://hideout-games.vercel.app/thebattle/thebattle.png",
     "popularity": [],
     "categories": ["Action"],
     "gameLink": "https://hideout-games.vercel.app/thebattle/index.html"
-  },
-  {
-    "name": "The Heist",
-    "icon": "https://hideout-games.vercel.app/theheist/theheist.jpg",
-    "popularity": [],
-    "categories": ["Puzzle", "Action"],
-    "gameLink": "https://hideout-games.vercel.app/theheist/index.html"
   },
   {
     "name": "There Is No Game",
@@ -1869,25 +1155,11 @@
     "gameLink": "https://hideout-games.vercel.app/there-is-no-game/index.html"
   },
   {
-    "name": "This Is The Only Level",
-    "icon": "https://hideout-games.vercel.app/thisistheonlylevel/thisistheonlylevel.png",
-    "popularity": [],
-    "categories": ["Puzzle", "Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/thisistheonlylevel/index.html"
-  },
-  {
     "name": "Tiny Fishing",
     "icon": "https://hideout-games.vercel.app/tiny-fishing/tiny-fishing.png",
     "popularity": [],
     "categories": ["Simulation", "Sports"],
     "gameLink": "https://hideout-games.vercel.app/tiny-fishing/index.html"
-  },
-  {
-    "name": "Tiny Islands",
-    "icon": "https://hideout-games.vercel.app/tiny-islands/splash.png",
-    "popularity": [],
-    "categories": ["Puzzle", "Strategy"],
-    "gameLink": "https://hideout-games.vercel.app/tiny-islands/index.html"
   },
   {
     "name": "Toss the Turtle",
@@ -1916,27 +1188,6 @@
     "popularity": [],
     "categories": ["Arcade"],
     "gameLink": "https://hideout-games.vercel.app/tunnel-rush/index.html"
-  },
-  {
-    "name": "TV Static",
-    "icon": "https://hideout-games.vercel.app/tv-static/static.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/tv-static/index.html"
-  },
-  {
-    "name": "Twitch Tetris",
-    "icon": "https://hideout-games.vercel.app/twitch-tetris/logo.png",
-    "popularity": [],
-    "categories": ["Puzzle", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/twitch-tetris/index.html"
-  },
-  {
-    "name": "Veloce",
-    "icon": "https://hideout-games.vercel.app/veloce/qN6zkD.png",
-    "popularity": [],
-    "categories": ["Racing"],
-    "gameLink": "https://hideout-games.vercel.app/veloce/index.html"
   },
   {
     "name": "Vex 3",
@@ -1974,55 +1225,6 @@
     "gameLink": "https://hideout-games.vercel.app/vex7/index.html"
   },
   {
-    "name": "Wall Smash",
-    "icon": "https://hideout-games.vercel.app/wallsmash/thumb.png",
-    "popularity": [],
-    "categories": ["Arcade"],
-    "gameLink": "https://hideout-games.vercel.app/wallsmash/index.html"
-  },
-  {
-    "name": "Waterworks",
-    "icon": "https://hideout-games.vercel.app/waterworks/square.png",
-    "popularity": [],
-    "categories": ["Puzzle"],
-    "gameLink": "https://hideout-games.vercel.app/waterworks/index.html"
-  },
-  {
-    "name": "Weave Silk",
-    "icon": "https://hideout-games.vercel.app/weavesilk/thumb.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/weavesilk/index.html"
-  },
-  {
-    "name": "WebGL Fluid Simulation",
-    "icon": "https://hideout-games.vercel.app/webgl-fluid-simulation/promo_back.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/webgl-fluid-simulation/index.html"
-  },
-  {
-    "name": "Win the White House",
-    "icon": "https://hideout-games.vercel.app/win-the-whitehouse/splash.png",
-    "popularity": [],
-    "categories": ["Strategy", "Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/win-the-whitehouse/index.html"
-  },
-  {
-    "name": "Wolfenstein 3D",
-    "icon": "https://hideout-games.vercel.app/wolf3d/splash.png",
-    "popularity": [],
-    "categories": ["Action", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/wolf3d/index.html"
-  },
-  {
-    "name": "Wordle",
-    "icon": "https://hideout-games.vercel.app/wordle/img/logo_512x512.png",
-    "popularity": [],
-    "categories": ["Puzzle", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/wordle/index.html"
-  },
-  {
     "name": "World's Hardest Game 2",
     "icon": "https://hideout-games.vercel.app/worlds-hardest-game-2/the-worlds-hardest-game-2.jpg",
     "popularity": [],
@@ -2035,40 +1237,5 @@
     "popularity": [],
     "categories": ["Puzzle", "Arcade"],
     "gameLink": "https://hideout-games.vercel.app/worlds-hardest-game/index.html"
-  },
-  {
-    "name": "X-Trial Racing",
-    "icon": "https://hideout-games.vercel.app/x-trial-racing/splash.png",
-    "popularity": [],
-    "categories": ["Racing", "Sports"],
-    "gameLink": "https://hideout-games.vercel.app/x-trial-racing/index.html"
-  },
-  {
-    "name": "XX142-B2.exe",
-    "icon": "https://hideout-games.vercel.app/xx142-b2exe/splash.png",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/xx142-b2exe/index.html"
-  },
-  {
-    "name": "Yoshi Fabrication",
-    "icon": "https://hideout-games.vercel.app/yoshifabrication/icons/icon-512.png",
-    "popularity": [],
-    "categories": ["Arcade", "Classic"],
-    "gameLink": "https://hideout-games.vercel.app/yoshifabrication/index.html"
-  },
-  {
-    "name": "You are Bezos",
-    "icon": "https://hideout-games.vercel.app/you-are-bezos/img/banner.png",
-    "popularity": [],
-    "categories": ["Simulation"],
-    "gameLink": "https://hideout-games.vercel.app/you-are-bezos/index.html"
-  },
-  {
-    "name": "Zombs Royale",
-    "icon": "https://hideout-games.vercel.app/zombs-royale/zomb.png",
-    "popularity": [],
-    "categories": ["Action"],
-    "gameLink": "https://hideout-games.vercel.app/zombs-royale/index.html"
   }
 ]
