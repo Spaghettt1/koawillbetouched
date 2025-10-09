@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { MessageSquare, X, Send, Heart } from "lucide-react";
+import { MessageSquare, X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -11,9 +11,7 @@ type ChatMessage = {
   user_id: string;
   message: string;
   created_at: string;
-  profiles: {
-    username: string;
-  };
+  username: string;
 };
 
 export const GlobalChat = () => {
@@ -57,26 +55,38 @@ export const GlobalChat = () => {
     try {
       const { data, error } = await (supabase as any)
         .from('global_chat')
-        .select(`
-          id,
-          user_id,
-          message,
-          created_at,
-          users!global_chat_user_id_fkey (username)
-        `)
-        .order('created_at', { ascending: false })
+        .select('id, user_id, message, created_at')
+        .order('created_at', { ascending: true })
         .limit(100);
 
-      if (!error && data) {
-        const formattedData = data.map((msg: any) => ({
-          ...msg,
-          profiles: { username: msg.users?.username || 'Unknown' }
-        }));
-        setMessages(formattedData.reverse());
-        scrollToBottom();
-      } else if (error) {
+      if (error) {
         console.error('Fetch messages error:', error);
+        return;
       }
+
+      if (!data) {
+        setMessages([]);
+        return;
+      }
+
+      // Fetch usernames for each message
+      const messagesWithUsernames = await Promise.all(
+        data.map(async (msg: any) => {
+          const { data: userData } = await (supabase as any)
+            .from('users')
+            .select('username')
+            .eq('id', msg.user_id)
+            .maybeSingle();
+          
+          return {
+            ...msg,
+            username: userData?.username || 'Unknown'
+          };
+        })
+      );
+
+      setMessages(messagesWithUsernames);
+      setTimeout(scrollToBottom, 100);
     } catch (err) {
       console.error('Fetch messages error:', err);
     }
@@ -84,7 +94,7 @@ export const GlobalChat = () => {
 
   const subscribeToMessages = () => {
     const channel = supabase
-      .channel('global_chat_channel')
+      .channel('global_chat_realtime')
       .on(
         'postgres_changes',
         {
@@ -94,28 +104,36 @@ export const GlobalChat = () => {
         },
         async (payload) => {
           try {
-            const { data: userProfile } = await (supabase as any)
+            const { data: userData } = await (supabase as any)
               .from('users')
               .select('username')
               .eq('id', payload.new.user_id)
               .maybeSingle();
 
             const newMsg: ChatMessage = {
-              ...payload.new,
-              profiles: userProfile || { username: 'Unknown' }
-            } as ChatMessage;
+              id: payload.new.id,
+              user_id: payload.new.user_id,
+              message: payload.new.message,
+              created_at: payload.new.created_at,
+              username: userData?.username || 'Unknown'
+            };
 
             setMessages(prev => {
               const updated = [...prev, newMsg];
+              
+              // Delete oldest messages if over 100
               if (updated.length > 100) {
-                // Delete the oldest message from DB
-                const oldest = updated[0];
-                (supabase as any).from('global_chat').delete().eq('id', oldest.id);
-                return updated.slice(1);
+                const toDelete = updated.slice(0, updated.length - 100);
+                toDelete.forEach(msg => {
+                  (supabase as any).from('global_chat').delete().eq('id', msg.id).then();
+                });
+                return updated.slice(-100);
               }
+              
               return updated;
             });
-            scrollToBottom();
+            
+            setTimeout(scrollToBottom, 100);
           } catch (err) {
             console.error('Subscribe error:', err);
           }
@@ -176,16 +194,12 @@ export const GlobalChat = () => {
 
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (days > 0) return `${days}d ago`;
-    if (hours > 0) return `${hours}h ago`;
-    if (minutes > 0) return `${minutes}m ago`;
-    return 'Just now';
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12;
+    const displayMinutes = minutes.toString().padStart(2, '0');
+    return `${displayHours}:${displayMinutes} ${ampm}`;
   };
 
   return (
@@ -232,7 +246,7 @@ export const GlobalChat = () => {
                 >
                   <div className="flex items-center gap-2 text-xs">
                     <span className="font-semibold text-primary">
-                      {msg.profiles?.username || 'Unknown'}
+                      {msg.username}
                     </span>
                     <span className="text-muted-foreground">
                       {formatTime(msg.created_at)}

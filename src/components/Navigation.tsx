@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Gamepad2, AppWindow, Globe, HelpCircle, Settings, User } from "lucide-react";
+import versionData from "@/data/version.json";
 
 const navItems = [
   { label: "Games", href: "/games", icon: Gamepad2 },
@@ -21,9 +22,12 @@ export const Navigation = () => {
         <div className="flex items-center justify-between">
           {/* Logo with rounded container */}
           <Link to="/" className="bg-card/50 backdrop-blur-md rounded-2xl px-6 py-3 border border-border/50 hover:border-primary/30 transition-colors">
-            <span className="text-2xl font-bold text-foreground">
-              Hideout<span className="text-primary">.</span>
-            </span>
+            <div className="flex flex-col">
+              <span className="text-2xl font-bold text-foreground">
+                Hideout<span className="text-primary">.</span>
+              </span>
+              <span className="text-xs text-muted-foreground">{versionData.version}</span>
+            </div>
           </Link>
 
           {/* Navigation Tabs */}

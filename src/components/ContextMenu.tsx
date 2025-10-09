@@ -94,7 +94,8 @@ export const ContextMenu = ({ x, y, onClose, isOnBrowser }: ContextMenuProps) =>
   };
 
   const handleInspect = () => {
-    toast.info("Opening DevTools... (Press F12 or Alt+Shift+I)");
+    // Dispatch event to open DevTools
+    window.dispatchEvent(new CustomEvent('hideout:toggle-devtools'));
     onClose();
   };
 
