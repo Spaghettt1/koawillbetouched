@@ -65,44 +65,15 @@ const Games = () => {
       setIsLoading(false);
     } else {
       setCurrentGame(null);
-      // Preload game icons with progress
+      // Quick load without progress counter (reverted behavior)
       const loadIcons = async () => {
         setIsLoading(true);
-        setLoadingProgress({ current: 0, total: games.length });
         const loaded: Record<string, boolean> = {};
-        let currentCount = 0;
-        
-        for (const game of games) {
-          await new Promise<void>((resolve) => {
-            let done = false;
-            const markDone = () => {
-              if (done) return; // prevent double counting
-              done = true;
-              loaded[game.name] = true;
-              currentCount = Math.min(currentCount + 1, games.length);
-              setLoadingProgress({ current: currentCount, total: games.length });
-              resolve();
-            };
-
-            if (!game.icon) {
-              markDone();
-              return;
-            }
-
-            const img = new Image();
-            img.onload = markDone;
-            img.onerror = markDone;
-            img.src = game.icon;
-
-            // Safety timeout after 2 seconds
-            setTimeout(markDone, 2000);
-          });
-        }
-        
+        games.forEach((game) => { if (game.icon) loaded[game.name] = true; });
         setIconsLoaded(loaded);
         setIsLoading(false);
       };
-      
+
       loadIcons();
     }
   }, [gameParam]);
@@ -333,7 +304,7 @@ const Games = () => {
           <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary border-t-transparent" />
             <p className="text-muted-foreground text-lg">
-              Loading games... {loadingProgress.current}/{loadingProgress.total}
+              Loading games...
             </p>
           </div>
         </main>
