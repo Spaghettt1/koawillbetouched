@@ -4,6 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.7.1";
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
 serve(async (req) => {
@@ -47,7 +48,11 @@ serve(async (req) => {
       );
     }
 
-    // Delete user (cascades to favorites, global_chat via FK)
+    // Delete related data first to ensure cleanup
+    await supabase.from('favorites').delete().eq('user_id', userId);
+    await supabase.from('global_chat').delete().eq('user_id', userId);
+
+    // Delete user
     const { error: delErr } = await supabase
       .from('users')
       .delete()
