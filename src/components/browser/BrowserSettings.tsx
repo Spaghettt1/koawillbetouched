@@ -6,41 +6,44 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Settings } from "lucide-react";
 import { toast } from "sonner";
-import { useUserData } from "@/hooks/use-user-data";
 
 export const BrowserSettings = () => {
-  const { saveToAccount } = useUserData();
   const [homePage, setHomePage] = useState("hideout://newtab");
   const [usePreferredBrowser, setUsePreferredBrowser] = useState(true);
 
   useEffect(() => {
-    const loadSettings = () => {
-      const localSettings = localStorage.getItem('hideout_browser_settings');
-      if (localSettings) {
+    try {
+      let settingsStr: string | null = null;
+      const storedUser = localStorage.getItem('hideout_user') || sessionStorage.getItem('hideout_user');
+      if (storedUser) {
         try {
-          const parsed = JSON.parse(localSettings);
-          setHomePage(parsed.homePage || "hideout://newtab");
-          setUsePreferredBrowser(parsed.usePreferredBrowser ?? true);
-        } catch (error) {
-          console.error('Error loading browser settings:', error);
-        }
+          const { id } = JSON.parse(storedUser);
+          if (id) settingsStr = localStorage.getItem(`hideout_browser_settings_${id}`);
+        } catch {}
       }
-    };
-
-    loadSettings();
+      if (!settingsStr) settingsStr = localStorage.getItem('hideout_browser_settings');
+      if (settingsStr) {
+        const settings = JSON.parse(settingsStr);
+        setHomePage(settings.homePage || "hideout://newtab");
+        setUsePreferredBrowser(settings.usePreferredBrowser !== undefined ? !!settings.usePreferredBrowser : true);
+      }
+    } catch (error) {
+      console.error('Error loading browser settings:', error);
+    }
   }, []);
 
-  const handleSave = async () => {
-    const settings = { 
-      homePage, 
-      usePreferredBrowser 
-    };
-    
-    // Save to localStorage
+  const handleSave = () => {
+    const settings = { homePage, usePreferredBrowser };
     localStorage.setItem('hideout_browser_settings', JSON.stringify(settings));
 
-    // Save to account (will auto-sync)
-    await saveToAccount();
+    // Also save per-account (if logged in via Hideout account)
+    const storedUser = localStorage.getItem('hideout_user') || sessionStorage.getItem('hideout_user');
+    if (storedUser) {
+      try {
+        const { id } = JSON.parse(storedUser);
+        if (id) localStorage.setItem(`hideout_browser_settings_${id}`, JSON.stringify(settings));
+      } catch {}
+    }
 
     toast.success("Settings saved successfully");
   };
