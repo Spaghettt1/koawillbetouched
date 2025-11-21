@@ -3,7 +3,6 @@ import { ArrowLeft, Download, Check, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { toast } from 'sonner';
 import { StarBackground } from '@/components/StarBackground';
@@ -32,7 +31,6 @@ const Addons = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [installedAddons, setInstalledAddons] = useState<string[]>([]);
   const [installingAddon, setInstallingAddon] = useState<string | null>(null);
-  const [installProgress, setInstallProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -40,7 +38,7 @@ const Addons = () => {
       setIsLoading(true);
       try {
         // Fetch addons data from remote URL
-        const response = await fetch('https://hideout-network.github.io/hideout-assets/addons/addons.json');
+        const response = await fetch('https://cdn.jsdelivr.net/gh/Hideout-Network/hideout-assets/addons/addons.json');
         const data = await response.json();
         setAddonsData(data);
 
@@ -83,43 +81,17 @@ const Addons = () => {
 
   const handleInstall = async (addon: Addon) => {
     setInstallingAddon(addon.id);
-    setInstallProgress(0);
 
     try {
-      // Fetch the actual file to get real size
-      const response = await fetch(addon.scriptUrl);
-      const blob = await response.blob();
-      const sizeInBytes = blob.size;
-      const sizeInKB = (sizeInBytes / 1024).toFixed(1);
-      
-      // Update addon with real size
-      const updatedAddon = { ...addon, fileSize: `${sizeInKB}kb` };
-
-      // Simulate download progress
-      const interval = setInterval(() => {
-        setInstallProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            return 100;
-          }
-          return prev + 10;
-        });
-      }, 100);
-
-      // Wait for progress to complete
-      await new Promise(resolve => setTimeout(resolve, 1100));
-
       const newInstalled = [...installedAddons, addon.scriptUrl];
       setInstalledAddons(newInstalled);
       localStorage.setItem('hideout_installed_addons', JSON.stringify(newInstalled));
 
-      toast.success(`${addon.name} installed successfully!`);
+      toast.success(`${addon.name} installed!`);
       setInstallingAddon(null);
-      setInstallProgress(0);
     } catch (error) {
       toast.error(`Failed to install ${addon.name}`);
       setInstallingAddon(null);
-      setInstallProgress(0);
     }
   };
 
@@ -143,27 +115,27 @@ const Addons = () => {
       
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-4">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => window.history.back()}
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <div className="flex-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="flex items-center gap-4 w-full sm:w-auto">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => window.history.back()}
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
             <h1 className="text-2xl font-bold">Add-Ons</h1>
           </div>
           <Input
             placeholder="Search add-ons..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-md"
+            className="w-full sm:max-w-md"
           />
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8 relative z-10">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 relative z-10">
         {/* Installed Add-ons Section */}
         {installedItems.length > 0 && (
           <section className="mb-12 animate-fade-in">
@@ -241,12 +213,13 @@ const Addons = () => {
                     </div>
                     
                     {installingAddon === addon.id ? (
-                      <div className="space-y-2 animate-fade-in">
-                        <Progress value={installProgress} className="h-2" />
-                        <p className="text-xs text-center text-muted-foreground">
-                          Installing... {installProgress}%
-                        </p>
-                      </div>
+                      <Button
+                        disabled
+                        className="w-full gap-2"
+                      >
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Installing...
+                      </Button>
                     ) : (
                       <Button
                         onClick={() => handleInstall(addon)}

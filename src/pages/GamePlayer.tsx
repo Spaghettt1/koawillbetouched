@@ -3,7 +3,6 @@ import { useSearchParams, Navigate, useNavigate } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Maximize, Heart } from "lucide-react";
-import gamesDataJson from "@/jsons/games.json";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { GameLoader } from "@/components/GameLoader";
@@ -11,27 +10,26 @@ import { BatteryWarning } from "@/components/BatteryWarning";
 import { FPSCounter } from "@/components/FPSCounter";
 import { StarBackground } from "@/components/StarBackground";
 
+const ZONES_URLS = [
+  "https://cdn.jsdelivr.net/gh/gn-math/assets@main/zones.json",
+  "https://cdn.jsdelivr.net/gh/gn-math/assets@latest/zones.json",
+  "https://raw.githubusercontent.com/gn-math/assets/main/zones.json"
+];
+const HTML_URL = "https://cdn.jsdelivr.net/gh/gn-math/html@main";
+const COVER_URL = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
+
 type Game = {
+  id: number;
   name: string;
-  iconPath?: string;
-  icon?: string; // Deprecated - for backward compatibility
-  popularity: string[];
-  categories: string[];
-  gamePath?: string;
-  gameLink?: string; // Deprecated - for backward compatibility
+  url: string;
+  cover: string;
 };
-
-type GamesData = {
-  site: string;
-  games: Game[];
-};
-
-const gamesData: GamesData = gamesDataJson as GamesData;
 
 const GamePlayer = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const gameParam = searchParams.get("game");
+  const [games, setGames] = useState<Game[]>([]);
   const [game, setGame] = useState<Game | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [user, setUser] = useState<any>(null);
@@ -39,13 +37,31 @@ const GamePlayer = () => {
   const [gameLoaded, setGameLoaded] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showFPS, setShowFPS] = useState(false);
-  const games = gamesData.games;
-  const gameSite = gamesData.site;
 
   useEffect(() => {
     const settings = JSON.parse(localStorage.getItem('hideout_settings') || '{}');
     setShowFPS(settings.showFPS || false);
+
+    // Load games with fallback URLs
+    loadGames();
   }, []);
+
+  const loadGames = async () => {
+    for (let url of ZONES_URLS) {
+      try {
+        const response = await fetch(url + "?t=" + Date.now());
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        const data = await response.json();
+        const validGames = data.filter((g: Game) => g.id > 0 && !g.url.startsWith("http"));
+        
+        setGames(validGames);
+        return;
+      } catch (error) {
+        continue;
+      }
+    }
+  };
 
   useEffect(() => {
     const storedUser = localStorage.getItem('hideout_user') || sessionStorage.getItem('hideout_user');
@@ -59,7 +75,7 @@ const GamePlayer = () => {
   }, []);
 
   useEffect(() => {
-    if (gameParam) {
+    if (gameParam && games.length > 0) {
       const foundGame = games.find(
         (g) => g.name.toLowerCase().replace(/\s+/g, '-') === gameParam
       );
@@ -74,12 +90,33 @@ const GamePlayer = () => {
         setGameLoaded(false);
       }
       
-      // Check if favorite
+      // Check if favorite and load game content
       if (foundGame) {
         checkFavoriteStatus(foundGame.name);
+        loadGameContent(foundGame);
       }
     }
-  }, [gameParam]);
+  }, [gameParam, games]);
+
+  const loadGameContent = async (currentGame: Game) => {
+    const gameUrl = currentGame.url
+      .replace('{HTML_URL}', HTML_URL)
+      .replace('{COVER_URL}', COVER_URL);
+
+    try {
+      const response = await fetch(gameUrl + "?t=" + Date.now());
+      const html = await response.text();
+
+      const iframe = document.getElementById('game-iframe') as HTMLIFrameElement;
+      if (iframe?.contentDocument) {
+        iframe.contentDocument.open();
+        iframe.contentDocument.write(html);
+        iframe.contentDocument.close();
+      }
+    } catch (error) {
+      toast.error('Failed to load game: ' + (error as Error).message);
+    }
+  };
 
   const checkFavoriteStatus = async (gameName: string) => {
     const localFavorites = JSON.parse(localStorage.getItem('hideout_game_favorites') || '[]');
@@ -204,7 +241,7 @@ const GamePlayer = () => {
         {showLoader && game && !gameLoaded && (
           <GameLoader
             gameName={game.name}
-            gameImage={game.iconPath ? `${gameSite}${game.iconPath}` : game.icon || ''}
+            gameImage={game.cover.replace('{COVER_URL}', COVER_URL).replace('{HTML_URL}', HTML_URL)}
             onLoadComplete={handleLoaderComplete}
           />
         )}
@@ -226,7 +263,11 @@ const GamePlayer = () => {
           </div>
           
           <div className="flex items-center gap-4">
-            <img src={game.iconPath ? `${gameSite}${game.iconPath}` : game.icon || ''} alt={game.name} className="w-12 h-12 rounded-lg" />
+            <img 
+              src={game.cover.replace('{COVER_URL}', COVER_URL).replace('{HTML_URL}', HTML_URL)} 
+              alt={game.name} 
+              className="w-12 h-12 rounded-lg" 
+            />
             <h1 className="text-4xl font-bold text-foreground">{game.name}</h1>
           </div>
           
@@ -234,7 +275,6 @@ const GamePlayer = () => {
             {showFPS && <FPSCounter />}
             <iframe
               id="game-iframe"
-              src={game.gamePath ? `${gameSite}${game.gamePath}` : game.gameLink || ''}
               className="w-full h-full"
               title={game.name}
               allowFullScreen

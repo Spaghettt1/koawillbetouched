@@ -41,11 +41,11 @@ const Index = () => {
       <GlobalChat />
 
       {/* Main Content */}
-      <div className="min-h-screen flex items-center justify-center px-6">
-        <main className="relative text-center space-y-12 animate-fade-in w-full max-w-3xl">
+      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 pt-24 sm:pt-0">
+        <main className="relative text-center space-y-8 sm:space-y-12 animate-fade-in w-full max-w-3xl">
           {/* Big Hideout Text */}
           <div className="relative">
-            <h1 className="text-9xl md:text-[12rem] font-bold tracking-tight">
+            <h1 className="text-6xl sm:text-9xl md:text-[12rem] font-bold tracking-tight">
               <span className="text-foreground">Hideout</span>
               <span className="text-primary">.</span>
             </h1>
@@ -59,23 +59,23 @@ const Index = () => {
 
           {/* Search Bar with Button Inside */}
           <form onSubmit={handleSearch} className="relative w-full">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-muted-foreground z-10" />
+            <Search className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground z-10" />
             <Input 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="search anything" 
-              className="w-full h-16 pl-16 pr-32 text-lg bg-card border-border transition-colors rounded-2xl"
+              className="w-full h-12 sm:h-16 pl-12 sm:pl-16 pr-24 sm:pr-32 text-base sm:text-lg bg-card border-border transition-colors rounded-2xl"
             />
             <button 
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 h-12 px-6 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 h-8 sm:h-12 px-4 sm:px-6 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 transition-colors text-sm sm:text-base"
             >
               Search
             </button>
           </form>
           
           {/* Action Buttons */}
-          <div className="flex justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
             <ReportBugDialog />
             <RequestGameDialog variant="outline" />
             <Button

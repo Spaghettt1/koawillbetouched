@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Settings, Bell, Palette, Database, Trash2, Mail, Globe, Zap, Activity } from "lucide-react";
+import { Settings, Bell, Palette, Database, Trash2, Globe, Zap, Activity } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { usePageTitle } from "@/hooks/use-page-title";
@@ -24,43 +24,6 @@ type ThemesData = {
   }>;
 };
 
-const EmailSettingsToggle = () => {
-  const [newslettersEnabled, setNewslettersEnabled] = useState(true);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('hideout_email_settings');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setNewslettersEnabled(parsed.newsletters !== undefined ? parsed.newsletters : true);
-      } catch {
-        setNewslettersEnabled(true);
-      }
-    }
-  }, []);
-
-  const handleChange = (checked: boolean) => {
-    setNewslettersEnabled(checked);
-    const settings = { newsletters: checked };
-    localStorage.setItem('hideout_email_settings', JSON.stringify(settings));
-    toast.success("Email settings updated", { duration: 5000 });
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="space-y-0.5">
-          <Label>Newsletters</Label>
-          <p className="text-sm text-muted-foreground">Receive updates, news, and special offers</p>
-        </div>
-        <Switch 
-          checked={newslettersEnabled} 
-          onCheckedChange={handleChange}
-        />
-      </div>
-    </div>
-  );
-};
 
 type SettingsData = {
   reducedMotion: boolean;
@@ -94,12 +57,14 @@ const SettingsPage = () => {
     incognitoMode: false,
     selectedTheme: '',
   });
+  
+  const [clipboardEnabled, setClipboardEnabled] = useState(false);
 
   useEffect(() => {
     // Fetch themes data from remote URL
     const loadThemes = async () => {
       try {
-        const response = await fetch('https://hideout-network.github.io/hideout-assets/themes/themes.json');
+        const response = await fetch('https://cdn.jsdelivr.net/gh/Hideout-Network/hideout-assets/themes/themes.json');
         const data = await response.json();
         setThemesData(data);
 
@@ -131,6 +96,22 @@ const SettingsPage = () => {
         // Check notification permission (don't overwrite other settings)
         if ('Notification' in window) {
           loadedSettings.notificationsEnabled = Notification.permission === 'granted';
+        }
+        
+        // Check clipboard permission
+        if (navigator.permissions) {
+          try {
+            const permission = await navigator.permissions.query({ name: 'clipboard-write' as PermissionName });
+            setClipboardEnabled(permission.state === 'granted');
+          } catch {
+            // Fallback: try to write to clipboard to check
+            try {
+              await navigator.clipboard.writeText('');
+              setClipboardEnabled(true);
+            } catch {
+              setClipboardEnabled(false);
+            }
+          }
         }
 
         // Update state and apply settings
@@ -266,10 +247,30 @@ const SettingsPage = () => {
       const permission = await Notification.requestPermission();
       if (permission === 'granted') {
         setSettings(prev => ({ ...prev, notificationsEnabled: true }));
-        toast.success("Notifications enabled!", { duration: 5000 });
+        toast.success("Notifications enabled!");
       } else {
-        toast.error("Notification permission denied", { duration: 5000 });
+        toast.error("Notification permission denied");
       }
+    }
+  };
+  
+  const handleRequestClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText('Clipboard access granted!');
+      setClipboardEnabled(true);
+      toast.success('Clipboard permission granted');
+    } catch {
+      toast.error('Clipboard permission denied');
+    }
+  };
+  
+  const handleTestPopups = () => {
+    const popup = window.open('about:blank', '_blank');
+    if (popup) {
+      popup.close();
+      toast.success('Popups are enabled');
+    } else {
+      toast.error('Popups are blocked. Please enable them in your browser settings.');
     }
   };
 
@@ -498,45 +499,56 @@ const SettingsPage = () => {
             </div>
           </Card>
 
-          {/* Notification Settings */}
+          {/* Permissions Settings */}
           <Card className="p-4 sm:p-6 bg-card border-border">
             <div className="flex items-center gap-3 mb-4">
               <Bell className="w-5 h-5 text-primary" />
-              <h2 className="text-lg sm:text-xl font-semibold">Notifications</h2>
+              <h2 className="text-lg sm:text-xl font-semibold">Permissions</h2>
             </div>
             <Separator className="mb-4" />
-            {!settings.notificationsEnabled ? (
-              <div className="text-center py-6 space-y-4">
-                <p className="text-muted-foreground">Enable notifications to receive updates</p>
-                <Button onClick={handleRequestNotifications} className="gap-2">
-                  <Bell className="w-4 h-4" />
-                  Allow Notifications
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Notifications</Label>
+                  <p className="text-sm text-muted-foreground">Allow site notifications</p>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleRequestNotifications}
+                  disabled={settings.notificationsEnabled}
+                >
+                  {settings.notificationsEnabled ? 'Enabled' : 'Enable'}
                 </Button>
               </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label>Enable Notifications</Label>
-                    <p className="text-sm text-muted-foreground">Receive general notifications</p>
-                  </div>
-                  <Switch 
-                    checked={settings.generalNotifications} 
-                    onCheckedChange={(v) => handleChange('generalNotifications', v)} 
-                  />
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Popups</Label>
+                  <p className="text-sm text-muted-foreground">Allow opening new tabs/windows</p>
                 </div>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleTestPopups}
+                >
+                  Enable
+                </Button>
               </div>
-            )}
-          </Card>
-
-          {/* Email Settings */}
-          <Card className="p-4 sm:p-6 bg-card border-border">
-            <div className="flex items-center gap-3 mb-4">
-              <Mail className="w-5 h-5 text-primary" />
-              <h2 className="text-lg sm:text-xl font-semibold">Email Settings</h2>
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label>Clipboard</Label>
+                  <p className="text-sm text-muted-foreground">Allow copy and paste</p>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleRequestClipboard}
+                  disabled={clipboardEnabled}
+                >
+                  {clipboardEnabled ? 'Enabled' : 'Enable'}
+                </Button>
+              </div>
             </div>
-            <Separator className="mb-4" />
-            <EmailSettingsToggle />
           </Card>
 
           {/* Browser Settings */}

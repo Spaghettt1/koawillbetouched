@@ -101,25 +101,18 @@ const Help = () => {
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-5">
-              <AccordionTrigger>Do I need to create an account?</AccordionTrigger>
+              <AccordionTrigger>How do I use the global chat?</AccordionTrigger>
               <AccordionContent>
-                No account is required to use most features. However, creating an account 
-                allows you to save your favorites, use the global chat, and sync your browser data.
+                Click the chat button in the bottom left corner to open global chat. All features are available to everyone. Chat history is limited to the last 100 messages to ensure optimal performance.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-6">
-              <AccordionTrigger>How do I use the global chat?</AccordionTrigger>
-              <AccordionContent>
-                Click the chat button in the bottom left corner to open global chat. You can view messages without an account, but you need to be logged in to send messages. Chat history is limited to the last 100 messages.
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="item-7">
               <AccordionTrigger>Can I request games or report bugs?</AccordionTrigger>
               <AccordionContent>
                 Yes! On the Games page, you'll find a "Request Game" button. On the home page, there's a "Report Bug" button below the search bar. Both will help you send feedback to our team.
               </AccordionContent>
             </AccordionItem>
-            <AccordionItem value="item-8">
+            <AccordionItem value="item-7">
               <AccordionTrigger>What keyboard shortcuts are available?</AccordionTrigger>
               <AccordionContent>
                 In the browser, press Alt+Z first, then: T (new tab), W (close tab), R (reload), L (focus address bar), ← (back), → (forward), F (fullscreen), I (dev tools).
