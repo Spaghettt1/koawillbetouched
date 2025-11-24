@@ -17,8 +17,6 @@ Visit `http://localhost:8080`
 npm run build
 ```
 
-Deploy the `dist` folder to any static host.
-
 ## Contributing
 
 Add games, themes, addons, about:blank presets and more at [hideout-assets](https://github.com/Hideout-Network/hideout-assets)
