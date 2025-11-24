@@ -11,6 +11,7 @@ import Games from "./pages/Games";
 import GamePlayer from "./pages/GamePlayer";
 import Apps from "./pages/Apps";
 import Help from "./pages/Help";
+import Credits from "./pages/Credits";
 import Settings from "./pages/Settings";
 import Browser from "./pages/Browser";
 import Changelog from "./pages/Changelog";
@@ -89,9 +90,6 @@ const App = () => {
           newScript.id = 'theme-script';
           newScript.src = `${themesData.site}${theme.themePath}`;
           newScript.async = true;
-          newScript.onload = () => {
-            console.log(`Theme loaded: ${settings.selectedTheme}`);
-          };
           document.head.appendChild(newScript);
         }
         
@@ -152,6 +150,7 @@ const App = () => {
             <Route path="/browser" element={<Browser />} />
             <Route path="/addons" element={<Addons />} />
             <Route path="/help" element={<Help />} />
+            <Route path="/credits" element={<Credits />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/changelog" element={<Changelog />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
